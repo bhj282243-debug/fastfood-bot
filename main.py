@@ -5,8 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 # Импортируем модули
-from routers import menu, orders
-import auth
+from routers import menu, orders, auth
 
 # Управление запуском приложения
 @asynccontextmanager
