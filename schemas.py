@@ -47,12 +47,6 @@ class Category(CategoryBase):
     class Config:
         from_attributes = True
 
-class Category(CategoryBase):
-    id: int
-    products: List[Product] = []
-    class Config:
-        from_attributes = True
-
 # Схемы для Заказов
 class OrderItemCreate(BaseModel):
     product_id: int
