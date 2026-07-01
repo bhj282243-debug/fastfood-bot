@@ -38,6 +38,15 @@ class CategoryBase(BaseModel):
     description: Optional[str] = None
     image_url: Optional[str] = None
 
+class CategoryCreate(CategoryBase):
+    pass
+
+class Category(CategoryBase):
+    id: int
+    products: List[Product] = []
+    class Config:
+        from_attributes = True
+
 class Category(CategoryBase):
     id: int
     products: List[Product] = []
