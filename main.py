@@ -4,18 +4,14 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
-# Импортируем модули
 from routers import menu, orders, auth
 
-# Управление запуском приложения
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Здесь можно добавить логику проверки БД при старте
     print("Application starting up...")
     yield
     print("Application shutting down...")
 
-# Инициализация FastAPI
 app = FastAPI(
     title="FastFood API",
     version="1.0.0",
@@ -24,7 +20,6 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# Настройка CORS (разрешения для запросов)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -33,31 +28,54 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Подключение всех наших роутеров
 app.include_router(menu.router, prefix="/api", tags=["Menu"])
 app.include_router(orders.router, prefix="/api", tags=["Orders"])
 app.include_router(auth.router, prefix="/api", tags=["Auth"])
 
-# Эндпоинт для проверки работы API
 @app.get("/health")
 async def health():
     return {"status": "ok"}
 
-# Подключение папки со статическими файлами (html, css, js)
+@app.get("/api/setup")
+async def setup_admin():
+    """Создаёт/обновляет админа. Открыть один раз в браузере."""
+    try:
+        from passlib.context import CryptContext
+        from sqlalchemy.future import select
+        from database import AsyncSessionLocal
+        from models import User
+
+        pwd = CryptContext(schemes=["bcrypt"], deprecated="auto")
+        hashed = pwd.hash("admin123")
+
+        async with AsyncSessionLocal() as session:
+            result = await session.execute(select(User).filter(User.username == "admin"))
+            user = result.scalar_one_or_none()
+            if user:
+                user.hashed_password = hashed
+                await session.commit()
+                return {"status": "ok", "message": "Пароль обновлён", "login": "admin", "password": "admin123"}
+            else:
+                new_user = User(
+                    username="admin",
+                    email="admin@fastfood.uz",
+                    hashed_password=hashed,
+                    is_active=True
+                )
+                session.add(new_user)
+                await session.commit()
+                return {"status": "ok", "message": "Админ создан", "login": "admin", "password": "admin123"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 if os.path.exists("static"):
     app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# Настройка для работы фронтенда (SPA)
 @app.get("/{full_path:path}")
 async def serve_spa(full_path: str):
-    # Если путь начинается с api, но роутер не найден — отдаем 404
     if full_path.startswith("api"):
         raise HTTPException(status_code=404, detail="Not Found")
-        
-    # Иначе отдаем index.html для работы интерфейса
     index_path = "static/index.html"
     if os.path.exists(index_path):
         return FileResponse(index_path)
-    
-    # Если файла нет — ошибка
     raise HTTPException(status_code=404, detail="Page not found")
