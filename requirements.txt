@@ -1,4 +1,4 @@
-fastapi
+fastapi==0.100.1
 uvicorn[standard]
 sqlalchemy
 asyncpg
@@ -6,4 +6,5 @@ python-jose[cryptography]
 passlib[bcrypt]
 python-dotenv
 python-multipart
+pydantic==1.10.13
 aiogram==3.7.0
