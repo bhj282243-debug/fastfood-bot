@@ -4,9 +4,10 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 from typing import List, Optional
 from database import get_db
-from models import Order, OrderItem, Product
+from models import Order, OrderItem, Product, User
 import schemas
 from bot import send_order_notification
+from auth import get_current_admin
 
 router = APIRouter()
 
@@ -76,7 +77,11 @@ async def create_order(order_data: schemas.OrderCreate, db: AsyncSession = Depen
     return full_order
 
 @router.get("/orders", response_model=List[schemas.Order])
-async def get_orders(status: Optional[str] = None, db: AsyncSession = Depends(get_db)):
+async def get_orders(
+    status: Optional[str] = None,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_admin)
+):
     stmt = select(Order).options(selectinload(Order.items).selectinload(OrderItem.product))
     if status:
         stmt = stmt.filter(Order.status == status)
@@ -84,7 +89,11 @@ async def get_orders(status: Optional[str] = None, db: AsyncSession = Depends(ge
     return result.scalars().all()
 
 @router.get("/orders/{order_id}", response_model=schemas.Order)
-async def get_order(order_id: int, db: AsyncSession = Depends(get_db)):
+async def get_order(
+    order_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_admin)
+):
     result = await db.execute(
         select(Order)
         .options(selectinload(Order.items).selectinload(OrderItem.product))
@@ -96,7 +105,12 @@ async def get_order(order_id: int, db: AsyncSession = Depends(get_db)):
     return order
 
 @router.patch("/orders/{order_id}/status", response_model=schemas.Order)
-async def update_order_status(order_id: int, status_update: schemas.OrderUpdateStatus, db: AsyncSession = Depends(get_db)):
+async def update_order_status(
+    order_id: int,
+    status_update: schemas.OrderUpdateStatus,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_admin)
+):
     result = await db.execute(select(Order).filter(Order.id == order_id))
     order = result.scalar_one_or_none()
     if not order:
@@ -111,7 +125,11 @@ async def update_order_status(order_id: int, status_update: schemas.OrderUpdateS
     return result.scalar_one()
 
 @router.delete("/orders/{order_id}")
-async def delete_order(order_id: int, db: AsyncSession = Depends(get_db)):
+async def delete_order(
+    order_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_admin)
+):
     result = await db.execute(select(Order).filter(Order.id == order_id))
     order = result.scalar_one_or_none()
     if not order:
