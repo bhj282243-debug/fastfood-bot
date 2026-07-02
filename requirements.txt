@@ -6,4 +6,4 @@ python-jose[cryptography]
 passlib[bcrypt]
 python-dotenv
 python-multipart
-aiogram==2.25.2
+httpx
