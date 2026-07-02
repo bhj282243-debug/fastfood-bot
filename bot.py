@@ -1,13 +1,11 @@
 import os
-from aiogram import Bot
+import httpx
 
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 ADMIN_ID = os.getenv("ADMIN_TELEGRAM_ID")
 
-bot = Bot(token=TOKEN) if TOKEN else None
-
 async def send_order_notification(order):
-    if not bot or not ADMIN_ID:
+    if not TOKEN or not ADMIN_ID:
         return
     try:
         items_text = "\n".join([
@@ -25,6 +23,11 @@ async def send_order_notification(order):
             f"💳 Оплата: {order.payment_method}\n"
             f"📝 Комментарий: {order.comment or 'Нет'}"
         )
-        await bot.send_message(chat_id=int(ADMIN_ID), text=text)
+        url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
+        async with httpx.AsyncClient() as client:
+            await client.post(url, json={
+                "chat_id": int(ADMIN_ID),
+                "text": text
+            })
     except Exception as e:
         print(f"Telegram ошибка: {e}")
