@@ -6,14 +6,8 @@
 <title>Apex Pizza — Панель управления</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;450;500;600;700&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js">
-</script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 <style>
-/* ═══════════════════════════════════════════════════════════════════════════
-   APEX PIZZA — ПРЕМИАЛЬНАЯ АДМИН-ПАНЕЛЬ
-   Стиль: Apple × Stripe × Soho House × итальянский ресторан
-   ═══════════════════════════════════════════════════════════════════════════ */
-
 :root {
   --copper: #A0785A;
   --copper-light: #C4A682;
@@ -40,1312 +34,340 @@
   --shadow: 0 8px 30px rgba(20,20,20,.04), 0 2px 10px rgba(160,120,90,.06);
   --shadow-md: 0 16px 40px rgba(20,20,20,.07), 0 4px 16px rgba(160,120,90,.1);
   --shadow-lg: 0 32px 64px rgba(20,20,20,.12), 0 8px 24px rgba(160,120,90,.08);
-  --transition: 300ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-fast: 180ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-spring: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  --transition: 300ms cubic-bezier(0.4,0,0.2,1);
+  --transition-fast: 180ms cubic-bezier(0.4,0,0.2,1);
+  --transition-spring: 400ms cubic-bezier(0.34,1.56,0.64,1);
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+*{box-sizing:border-box;margin:0;padding:0;}
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: var(--white);
-  color: var(--ink);
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  letter-spacing: -0.01em;
-  position: relative;
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  background:var(--white);color:var(--ink);min-height:100vh;
+  -webkit-font-smoothing:antialiased;letter-spacing:-0.01em;
 }
 
-/* Фоновая текстура */
 body::before {
-  content: '';
-  display: block;
-  height: 1px;
-  background: linear-gradient(90deg, transparent 0%, #C4A682 25%, #C4A682 75%, transparent 100%);
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  opacity: 0.5;
+  content:'';display:block;height:1px;
+  background:linear-gradient(90deg,transparent 0%,#C4A682 25%,#C4A682 75%,transparent 100%);
+  position:fixed;top:0;left:0;right:0;z-index:1000;opacity:.5;
 }
 
-body::after {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background:
-    radial-gradient(ellipse at 15% 30%, rgba(160,120,90,0.02) 0%, transparent 55%),
-    radial-gradient(ellipse at 85% 70%, rgba(196,168,130,0.015) 0%, transparent 55%),
-    radial-gradient(ellipse at 50% 50%, rgba(160,120,90,0.01) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   LOGIN SCREEN
-   ═══════════════════════════════════════════════════════════════════════════ */
+/* LOGIN */
 #loginScreen {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  background: var(--white);
-  position: relative;
-  z-index: 1;
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  padding:24px;background:var(--white);
 }
-
 .login-card {
-  width: 100%;
-  max-width: 420px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 24px;
-  padding: 52px 44px;
-  box-shadow: var(--shadow-lg);
-  animation: loginSlideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  width:100%;max-width:420px;background:var(--surface);
+  border:1px solid var(--border);border-radius:24px;padding:52px 44px;
+  box-shadow:var(--shadow-lg);animation:loginSlideUp .5s cubic-bezier(.34,1.56,.64,1);
 }
-
-@keyframes loginSlideUp {
-  from {
-    opacity: 0;
-    transform: translateY(24px) scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
+@keyframes loginSlideUp{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
 .login-mark {
-  width: 60px;
-  height: 60px;
-  background: linear-gradient(135deg, var(--ink) 0%, #3D3229 100%);
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 28px;
-  color: var(--surface);
-  box-shadow: 0 4px 16px rgba(26,21,18,0.18);
+  width:60px;height:60px;background:linear-gradient(135deg,var(--ink) 0%,#3D3229 100%);
+  border-radius:16px;display:flex;align-items:center;justify-content:center;
+  margin-bottom:28px;color:var(--surface);box-shadow:0 4px 16px rgba(26,21,18,.18);
 }
-
-.login-title {
-  font-size: 24px;
-  font-weight: 600;
-  color: var(--ink);
-  margin-bottom: 4px;
-  letter-spacing: -0.5px;
-}
-
-.login-sub {
-  font-size: 13px;
-  color: var(--ink-60);
-  margin-bottom: 36px;
-  font-weight: 450;
-}
-
-.field-label {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
-  color: var(--ink-60);
-  margin-bottom: 8px;
-  display: block;
-}
-
-.field-wrap {
-  margin-bottom: 18px;
-}
-
+.login-title{font-size:24px;font-weight:600;color:var(--ink);margin-bottom:4px;letter-spacing:-.5px;}
+.login-sub{font-size:13px;color:var(--ink-60);margin-bottom:36px;font-weight:450;}
+.field-label{font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--ink-60);margin-bottom:8px;display:block;}
+.field-wrap{margin-bottom:18px;}
 .field-input {
-  width: 100%;
-  height: 50px;
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius-xs);
-  padding: 0 18px;
-  font-size: 14px;
-  font-family: 'Inter', sans-serif;
-  color: var(--ink);
-  background: var(--surface);
-  outline: none;
-  transition: all var(--transition-fast);
+  width:100%;height:50px;border:1.5px solid var(--border);border-radius:var(--radius-xs);
+  padding:0 18px;font-size:14px;font-family:'Inter',sans-serif;color:var(--ink);
+  background:var(--surface);outline:none;transition:all var(--transition-fast);
 }
-
-.field-input:hover {
-  border-color: #D0C8BE;
-}
-
-.field-input:focus {
-  border-color: var(--copper);
-  box-shadow: 0 0 0 4px rgba(160,120,90,0.08);
-}
-
+.field-input:hover{border-color:#D0C8BE;}
+.field-input:focus{border-color:var(--copper);box-shadow:0 0 0 4px rgba(160,120,90,.08);}
 .btn-primary {
-  width: 100%;
-  height: 50px;
-  background: var(--copper);
-  color: white;
-  border: none;
-  border-radius: var(--radius-xs);
-  font-size: 14px;
-  font-weight: 600;
-  font-family: 'Inter', sans-serif;
-  cursor: pointer;
-  margin-top: 10px;
-  transition: all var(--transition-fast);
-  letter-spacing: 0.1px;
-  position: relative;
-  top: 0;
+  width:100%;height:50px;background:var(--copper);color:white;border:none;
+  border-radius:var(--radius-xs);font-size:14px;font-weight:600;font-family:'Inter',sans-serif;
+  cursor:pointer;margin-top:10px;transition:all var(--transition-fast);
 }
+.btn-primary:hover{background:#8B6449;transform:translateY(-1px);box-shadow:0 6px 20px rgba(139,100,73,.25);}
+.btn-primary:active{transform:translateY(1px);box-shadow:none;}
+.login-error{font-size:13px;color:var(--red);margin-top:14px;display:none;text-align:center;font-weight:500;}
 
-.btn-primary:hover {
-  background: #8B6449;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(139,100,73,0.25);
-}
-
-.btn-primary:active {
-  transform: translateY(1px);
-  box-shadow: none;
-}
-
-.login-error {
-  font-size: 13px;
-  color: var(--red);
-  margin-top: 14px;
-  display: none;
-  text-align: center;
-  font-weight: 500;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   HEADER
-   ═══════════════════════════════════════════════════════════════════════════ */
-#appScreen {
-  display: none;
-  padding-top: 1px;
-}
-
+/* HEADER */
+#appScreen{display:none;padding-top:1px;}
 .header {
-  position: sticky;
-  top: 1px;
-  background: rgba(248,244,239,0.78);
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
-  border-bottom: 1px solid rgba(232,226,218,0.5);
-  z-index: 100;
-  padding: 0 28px;
+  position:sticky;top:1px;
+  background:rgba(248,244,239,.88);
+  backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);
+  border-bottom:1px solid rgba(232,226,218,.5);z-index:100;padding:0 28px;
 }
-
-.header-inner {
-  max-width: 1240px;
-  margin: 0 auto;
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.header-brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
+.header-inner{max-width:1240px;margin:0 auto;height:64px;display:flex;align-items:center;justify-content:space-between;}
+.header-brand{display:flex;align-items:center;gap:12px;}
 .brand-icon {
-  width: 38px;
-  height: 38px;
-  background: linear-gradient(135deg, var(--ink) 0%, #3D3229 100%);
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--surface);
-  box-shadow: 0 2px 10px rgba(26,21,18,0.12);
+  width:38px;height:38px;background:linear-gradient(135deg,var(--ink) 0%,#3D3229 100%);
+  border-radius:10px;display:flex;align-items:center;justify-content:center;
+  color:var(--surface);box-shadow:0 2px 10px rgba(26,21,18,.12);
 }
-
-.brand-name {
-  font-size: 17px;
-  font-weight: 600;
-  color: var(--ink);
-  letter-spacing: -0.3px;
+.brand-name{font-size:17px;font-weight:600;color:var(--ink);letter-spacing:-.3px;}
+.header-right{display:flex;align-items:center;gap:10px;}
+.live-badge{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:600;color:var(--green);background:var(--green-bg);padding:5px 12px;border-radius:20px;letter-spacing:.5px;}
+.live-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse-green 2s infinite;}
+.sound-btn,.logout-btn {
+  height:36px;border:1.5px solid var(--border);border-radius:10px;background:transparent;
+  cursor:pointer;transition:all var(--transition-fast);font-family:'Inter',sans-serif;
 }
+.sound-btn{width:36px;display:flex;align-items:center;justify-content:center;color:var(--ink-60);}
+.sound-btn:hover{border-color:var(--copper);color:var(--copper);transform:translateY(-1px);}
+.sound-btn.muted{color:var(--ink-30);}
+.logout-btn{padding:0 16px;font-size:12px;font-weight:500;color:var(--ink-60);}
+.logout-btn:hover{border-color:var(--red);color:var(--red);transform:translateY(-1px);}
 
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.live-badge {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--green);
-  background: var(--green-bg);
-  padding: 5px 12px;
-  border-radius: 20px;
-  letter-spacing: 0.5px;
-}
-
-.live-dot {
-  width: 6px;
-  height: 6px;
-  background: var(--green);
-  border-radius: 50%;
-  animation: pulse-green 2s infinite;
-}
-
-.sound-btn {
-  width: 36px;
-  height: 36px;
-  border: 1.5px solid var(--border);
-  border-radius: 10px;
-  background: transparent;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--ink-60);
-  transition: all var(--transition-fast);
-  position: relative;
-  top: 0;
-}
-
-.sound-btn:hover {
-  border-color: var(--copper);
-  color: var(--copper);
-  transform: translateY(-1px);
-}
-
-.sound-btn:active {
-  transform: translateY(1px);
-}
-
-.sound-btn.muted {
-  color: var(--ink-30);
-}
-
-.logout-btn {
-  height: 36px;
-  padding: 0 16px;
-  border: 1.5px solid var(--border);
-  border-radius: 10px;
-  background: transparent;
-  font-size: 12px;
-  font-weight: 500;
-  font-family: 'Inter', sans-serif;
-  color: var(--ink-60);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  position: relative;
-  top: 0;
-}
-
-.logout-btn:hover {
-  border-color: var(--red);
-  color: var(--red);
-  transform: translateY(-1px);
-}
-
-.logout-btn:active {
-  transform: translateY(1px);
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   NAVIGATION
-   ═══════════════════════════════════════════════════════════════════════════ */
-.nav-wrap {
-  background: rgba(255,252,249,0.6);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(232,226,218,0.4);
-  padding: 0 28px;
-}
-
-.nav-inner {
-  max-width: 1240px;
-  margin: 0 auto;
-  display: flex;
-  gap: 6px;
-  padding: 6px 0;
-}
-
+/* NAV */
+.nav-wrap{background:rgba(255,252,249,.6);backdrop-filter:blur(12px);border-bottom:1px solid rgba(232,226,218,.4);padding:0 28px;}
+.nav-inner{max-width:1240px;margin:0 auto;display:flex;gap:6px;padding:6px 0;}
 .nav-tab {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 22px;
-  height: 44px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--ink-60);
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  border-radius: 14px;
-  transition: all var(--transition-fast);
-  font-family: 'Inter', sans-serif;
-  letter-spacing: -0.2px;
+  display:flex;align-items:center;gap:8px;padding:10px 22px;height:44px;
+  font-size:13px;font-weight:500;color:var(--ink-60);border:none;background:transparent;
+  cursor:pointer;border-radius:14px;transition:all var(--transition-fast);
+  font-family:'Inter',sans-serif;letter-spacing:-.2px;
 }
+.nav-tab:hover{color:var(--ink);background:rgba(160,120,90,.04);}
+.nav-tab.active{color:var(--ink);background:var(--surface);font-weight:600;box-shadow:var(--shadow);}
+.nav-badge{min-width:18px;height:18px;background:var(--copper);color:white;border-radius:9px;font-size:10px;font-weight:700;display:none;align-items:center;justify-content:center;padding:0 5px;}
+.nav-badge.visible{display:flex;}
 
-.nav-tab:hover {
-  color: var(--ink);
-  background: rgba(160,120,90,0.04);
-}
+/* MAIN */
+.main{max-width:1240px;margin:0 auto;padding:36px 28px;}
+.page{display:none;}
+.page.active{display:block;}
 
-.nav-tab.active {
-  color: var(--ink);
-  background: var(--surface);
-  font-weight: 600;
-  box-shadow: var(--shadow);
-}
-
-.nav-badge {
-  min-width: 18px;
-  height: 18px;
-  background: var(--copper);
-  color: white;
-  border-radius: 9px;
-  font-size: 10px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 5px;
-  display: none;
-}
-
-.nav-badge.visible {
-  display: flex;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   MAIN CONTENT
-   ═══════════════════════════════════════════════════════════════════════════ */
-.main {
-  max-width: 1240px;
-  margin: 0 auto;
-  padding: 36px 28px;
-  position: relative;
-  z-index: 1;
-}
-
-.page {
-  display: none;
-}
-
-.page.active {
-  display: block;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   STATS CARDS
-   ═══════════════════════════════════════════════════════════════════════════ */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-  margin-bottom: 44px;
-}
-
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-bottom:44px;}
 .stat-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 28px 28px 24px;
-  box-shadow: var(--shadow);
-  transition: all var(--transition);
-  animation: statSlideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
-  position: relative;
-  overflow: hidden;
-  cursor: default;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:28px 28px 24px;box-shadow:var(--shadow);transition:all var(--transition);
+  animation:statSlideUp .5s cubic-bezier(.4,0,.2,1) both;position:relative;overflow:hidden;
 }
+.stat-card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--copper) 0%,var(--copper-light) 100%);opacity:0;transition:opacity var(--transition);}
+.stat-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);}
+.stat-card:hover::after{opacity:1;}
+@keyframes statSlideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.stat-label{font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--ink-60);margin-bottom:16px;}
+.stat-value{font-size:48px;font-weight:700;color:var(--ink);letter-spacing:-2px;line-height:1;margin-bottom:6px;font-variant-numeric:tabular-nums;}
+.stat-sub{font-size:12px;color:var(--ink-60);font-weight:450;}
 
-.stat-card::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--copper) 0%, var(--copper-light) 100%);
-  opacity: 0;
-  transition: opacity var(--transition);
-}
+/* SECTION */
+.section-title{font-size:22px;font-weight:600;color:var(--ink);letter-spacing:-.4px;margin-bottom:20px;}
 
-.stat-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
-}
-
-.stat-card:hover::after {
-  opacity: 1;
-}
-
-@keyframes statSlideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.stat-label {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
-  color: var(--ink-60);
-  margin-bottom: 16px;
-}
-
-.stat-value {
-  font-size: 48px;
-  font-weight: 700;
-  color: var(--ink);
-  letter-spacing: -2px;
-  line-height: 1;
-  margin-bottom: 6px;
-  font-feature-settings: "tnum";
-  font-variant-numeric: tabular-nums;
-}
-
-.stat-sub {
-  font-size: 12px;
-  color: var(--ink-60);
-  font-weight: 450;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   SECTION TITLE
-   ═══════════════════════════════════════════════════════════════════════════ */
-.section-title {
-  font-size: 22px;
-  font-weight: 600;
-  color: var(--ink);
-  letter-spacing: -0.4px;
-  margin-bottom: 20px;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   FILTER BUTTONS
-   ═══════════════════════════════════════════════════════════════════════════ */
-.filters {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 24px;
-}
-
+/* FILTERS */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;}
 .filter-btn {
-  height: 36px;
-  padding: 0 16px;
-  border: 1.5px solid var(--border);
-  border-radius: 20px;
-  background: transparent;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--ink-60);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  font-family: 'Inter', sans-serif;
-  white-space: nowrap;
-  position: relative;
-  top: 0;
+  height:36px;padding:0 16px;border:1.5px solid var(--border);border-radius:20px;
+  background:transparent;font-size:12px;font-weight:500;color:var(--ink-60);
+  cursor:pointer;transition:all var(--transition-fast);font-family:'Inter',sans-serif;white-space:nowrap;
 }
+.filter-btn:hover{border-color:var(--copper);color:var(--copper);transform:translateY(-1px);}
+.filter-btn.active{background:var(--copper);border-color:var(--copper);color:white;font-weight:600;}
 
-.filter-btn:hover {
-  border-color: var(--copper);
-  color: var(--copper);
-  transform: translateY(-1px);
-}
-
-.filter-btn:active {
-  transform: translateY(1px);
-}
-
-.filter-btn.active {
-  background: var(--copper);
-  border-color: var(--copper);
-  color: white;
-  font-weight: 600;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   ORDER CARDS
-   ═══════════════════════════════════════════════════════════════════════════ */
-.orders-list {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
+/* ORDERS */
+.orders-list{display:flex;flex-direction:column;gap:14px;}
 .order-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 22px 26px;
-  box-shadow: var(--shadow);
-  border-left: 4px solid transparent;
-  transition: all var(--transition);
-  cursor: pointer;
-  animation: orderSlideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
-  position: relative;
-  overflow: hidden;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:22px 26px;box-shadow:var(--shadow);border-left:4px solid transparent;
+  transition:all var(--transition);cursor:pointer;animation:orderSlideUp .4s cubic-bezier(.4,0,.2,1) both;
+  position:relative;overflow:hidden;
 }
+.order-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);}
+@keyframes orderSlideUp{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.order-card.status-new{border-left-color:var(--copper);}
+.order-card.status-accepted{border-left-color:var(--blue);}
+.order-card.status-preparing{border-left-color:var(--amber);}
+.order-card.status-ready{border-left-color:var(--green);}
+.order-card.status-delivering{border-left-color:#7C3AED;}
+.order-card.status-completed{border-left-color:var(--ink-30);}
+.order-card.status-cancelled{border-left-color:var(--red);}
+.order-card.is-new-pulse::after{content:'';position:absolute;top:14px;right:14px;width:8px;height:8px;background:var(--copper);border-radius:50%;animation:pulse-dot 1.2s ease infinite;}
+.order-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.order-id{font-size:14px;font-weight:700;color:var(--ink);letter-spacing:-.3px;}
+.order-time{font-size:11px;color:var(--ink-60);font-weight:450;}
+.order-customer{font-size:15px;font-weight:500;color:var(--ink);margin-bottom:4px;letter-spacing:-.2px;}
+.order-details{font-size:12px;color:var(--ink-60);margin-bottom:14px;line-height:1.5;}
+.order-footer{display:flex;align-items:center;justify-content:space-between;}
+.order-total{font-size:18px;font-weight:700;color:var(--ink);letter-spacing:-.4px;}
+.status-badge{font-size:11px;font-weight:600;padding:5px 12px;border-radius:20px;letter-spacing:.6px;text-transform:uppercase;}
+.badge-new{background:var(--copper-pale);color:var(--copper);}
+.badge-accepted{background:var(--blue-bg);color:var(--blue);}
+.badge-preparing{background:var(--amber-bg);color:var(--amber);}
+.badge-ready{background:var(--green-bg);color:var(--green);}
+.badge-delivering{background:#F3E8FF;color:#7C3AED;}
+.badge-completed{background:var(--ink-10);color:var(--ink-60);}
+.badge-cancelled{background:var(--red-bg);color:var(--red);}
 
-.order-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
-}
+/* EMPTY */
+.empty-state{text-align:center;padding:80px 24px;color:var(--ink-60);}
+.empty-icon{width:64px;height:64px;margin:0 auto 20px;color:var(--ink-30);opacity:.6;}
+.empty-title{font-size:17px;font-weight:600;color:var(--ink);margin-bottom:8px;letter-spacing:-.3px;}
+.empty-sub{font-size:13px;color:var(--ink-60);font-weight:450;}
 
-@keyframes orderSlideUp {
-  from {
-    opacity: 0;
-    transform: translateY(14px) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
+/* SKELETON */
+.skeleton{background:linear-gradient(90deg,var(--ink-10) 25%,#EBE4DC 50%,var(--ink-10) 75%);background-size:200% 100%;animation:shimmer 1.6s infinite;border-radius:8px;}
+.skeleton-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px 26px;margin-bottom:14px;}
 
-.order-card.status-new {
-  border-left-color: var(--copper);
-}
-
-.order-card.status-accepted {
-  border-left-color: var(--blue);
-}
-
-.order-card.status-preparing {
-  border-left-color: var(--amber);
-}
-
-.order-card.status-ready {
-  border-left-color: var(--green);
-}
-
-.order-card.status-delivering {
-  border-left-color: #7C3AED;
-}
-
-.order-card.status-completed {
-  border-left-color: var(--ink-30);
-}
-
-.order-card.status-cancelled {
-  border-left-color: var(--red);
-}
-
-.order-card.is-new-pulse::after {
-  content: '';
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  width: 8px;
-  height: 8px;
-  background: var(--copper);
-  border-radius: 50%;
-  animation: pulse-dot 1.2s ease infinite;
-}
-
-.order-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 14px;
-}
-
-.order-id {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--ink);
-  letter-spacing: -0.3px;
-}
-
-.order-time {
-  font-size: 11px;
-  color: var(--ink-60);
-  font-weight: 450;
-}
-
-.order-customer {
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--ink);
-  margin-bottom: 4px;
-  letter-spacing: -0.2px;
-}
-
-.order-details {
-  font-size: 12px;
-  color: var(--ink-60);
-  margin-bottom: 14px;
-  line-height: 1.5;
-}
-
-.order-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.order-total {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--ink);
-  letter-spacing: -0.4px;
-}
-
-.status-badge {
-  font-size: 11px;
-  font-weight: 600;
-  padding: 5px 12px;
-  border-radius: 20px;
-  letter-spacing: 0.6px;
-  text-transform: uppercase;
-  transition: all var(--transition);
-}
-
-.badge-new {
-  background: var(--copper-pale);
-  color: var(--copper);
-}
-
-.badge-accepted {
-  background: var(--blue-bg);
-  color: var(--blue);
-}
-
-.badge-preparing {
-  background: var(--amber-bg);
-  color: var(--amber);
-}
-
-.badge-ready {
-  background: var(--green-bg);
-  color: var(--green);
-}
-
-.badge-delivering {
-  background: #F3E8FF;
-  color: #7C3AED;
-}
-
-.badge-completed {
-  background: var(--ink-10);
-  color: var(--ink-60);
-}
-
-.badge-cancelled {
-  background: var(--red-bg);
-  color: var(--red);
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   EMPTY STATE
-   ═══════════════════════════════════════════════════════════════════════════ */
-.empty-state {
-  text-align: center;
-  padding: 80px 24px;
-  color: var(--ink-60);
-}
-
-.empty-icon {
-  width: 64px;
-  height: 64px;
-  margin: 0 auto 20px;
-  color: var(--ink-30);
-  opacity: 0.6;
-}
-
-.empty-title {
-  font-size: 17px;
-  font-weight: 600;
-  color: var(--ink);
-  margin-bottom: 8px;
-  letter-spacing: -0.3px;
-}
-
-.empty-sub {
-  font-size: 13px;
-  color: var(--ink-60);
-  font-weight: 450;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   SKELETON
-   ═══════════════════════════════════════════════════════════════════════════ */
-.skeleton {
-  background: linear-gradient(90deg, var(--ink-10) 25%, #EBE4DC 50%, var(--ink-10) 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.6s infinite;
-  border-radius: 8px;
-}
-
-.skeleton-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 22px 26px;
-  margin-bottom: 14px;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   MENU PAGE
-   ═══════════════════════════════════════════════════════════════════════════ */
-.menu-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 28px;
-  flex-wrap: wrap;
-  gap: 14px;
-}
-
+/* MENU */
+.menu-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:14px;}
 .btn-outline {
-  height: 42px;
-  padding: 0 20px;
-  border: 1.5px solid var(--copper);
-  border-radius: var(--radius-xs);
-  background: transparent;
-  color: var(--copper);
-  font-size: 13px;
-  font-weight: 600;
-  font-family: 'Inter', sans-serif;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  position: relative;
-  top: 0;
+  height:42px;padding:0 20px;border:1.5px solid var(--copper);border-radius:var(--radius-xs);
+  background:transparent;color:var(--copper);font-size:13px;font-weight:600;
+  font-family:'Inter',sans-serif;cursor:pointer;transition:all var(--transition-fast);
+  display:flex;align-items:center;gap:7px;
 }
-
-.btn-outline:hover {
-  background: var(--copper);
-  color: white;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(160,120,90,0.2);
-}
-
-.btn-outline:active {
-  transform: translateY(1px);
-  box-shadow: none;
-}
-
+.btn-outline:hover{background:var(--copper);color:white;transform:translateY(-1px);box-shadow:0 4px 14px rgba(160,120,90,.2);}
+.btn-outline:active{transform:translateY(1px);box-shadow:none;}
 .btn-solid {
-  height: 42px;
-  padding: 0 20px;
-  border: none;
-  border-radius: var(--radius-xs);
-  background: var(--copper);
-  color: white;
-  font-size: 13px;
-  font-weight: 600;
-  font-family: 'Inter', sans-serif;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  position: relative;
-  top: 0;
+  height:42px;padding:0 20px;border:none;border-radius:var(--radius-xs);
+  background:var(--copper);color:white;font-size:13px;font-weight:600;
+  font-family:'Inter',sans-serif;cursor:pointer;transition:all var(--transition-fast);
+  display:flex;align-items:center;gap:7px;
 }
-
-.btn-solid:hover {
-  background: #8B6449;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(139,100,73,0.25);
-}
-
-.btn-solid:active {
-  transform: translateY(1px);
-  box-shadow: none;
-}
-
-.btn-group {
-  display: flex;
-  gap: 10px;
-}
-
-.category-block {
-  margin-bottom: 36px;
-}
-
+.btn-solid:hover{background:#8B6449;transform:translateY(-1px);box-shadow:0 6px 20px rgba(139,100,73,.25);}
+.btn-solid:active{transform:translateY(1px);box-shadow:none;}
+.btn-group{display:flex;gap:10px;}
+.category-block{margin-bottom:36px;}
 .category-title {
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--ink-60);
-  margin-bottom: 14px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  color:var(--ink-60);margin-bottom:14px;padding-bottom:10px;
+  border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;
 }
-
-.products-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 14px;
-}
-
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;}
 .product-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px;
-  box-shadow: var(--shadow);
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  transition: all var(--transition);
-  animation: productSlideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:20px;box-shadow:var(--shadow);display:flex;align-items:flex-start;gap:16px;
+  transition:all var(--transition);animation:productSlideUp .4s cubic-bezier(.4,0,.2,1) both;
 }
-
-.product-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
-}
-
-@keyframes productSlideUp {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
+.product-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);}
+@keyframes productSlideUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 .product-img {
-  width: 64px;
-  height: 64px;
-  background: var(--copper-pale);
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--copper);
-  flex-shrink: 0;
-  overflow: hidden;
-  box-shadow: 0 2px 10px rgba(26,21,18,0.06);
+  width:72px;height:72px;background:var(--copper-pale);border-radius:14px;
+  display:flex;align-items:center;justify-content:center;color:var(--copper);
+  flex-shrink:0;overflow:hidden;box-shadow:0 2px 10px rgba(26,21,18,.06);
 }
-
-.product-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.product-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.product-name {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--ink);
-  margin-bottom: 3px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  letter-spacing: -0.2px;
-}
-
-.product-desc {
-  font-size: 11px;
-  color: var(--ink-60);
-  margin-bottom: 10px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  line-height: 1.5;
-}
-
-.product-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.product-price {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--ink);
-  letter-spacing: -0.3px;
-}
-
-.product-actions {
-  display: flex;
-  gap: 6px;
-}
-
+.product-img img{width:100%;height:100%;object-fit:cover;}
+.product-info{flex:1;min-width:0;}
+.product-name{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.2px;}
+.product-desc{font-size:11px;color:var(--ink-60);margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.5;}
+.product-footer{display:flex;align-items:center;justify-content:space-between;}
+.product-price{font-size:16px;font-weight:700;color:var(--ink);letter-spacing:-.3px;}
+.product-actions{display:flex;gap:6px;}
 .icon-btn {
-  width: 32px;
-  height: 32px;
-  border: 1.5px solid var(--border);
-  border-radius: 9px;
-  background: transparent;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--ink-60);
-  transition: all var(--transition-fast);
-  position: relative;
-  top: 0;
+  width:32px;height:32px;border:1.5px solid var(--border);border-radius:9px;background:transparent;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink-60);
+  transition:all var(--transition-fast);
 }
+.icon-btn:hover{border-color:var(--copper);color:var(--copper);transform:translateY(-1px);}
+.icon-btn.danger:hover{border-color:var(--red);color:var(--red);}
 
-.icon-btn:hover {
-  border-color: var(--copper);
-  color: var(--copper);
-  transform: translateY(-1px);
-}
-
-.icon-btn:active {
-  transform: translateY(1px);
-}
-
-.icon-btn.danger:hover {
-  border-color: var(--red);
-  color: var(--red);
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   MODALS
-   ═══════════════════════════════════════════════════════════════════════════ */
+/* MODALS */
 .modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(26,21,18,0.45);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  z-index: 200;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
+  position:fixed;inset:0;background:rgba(26,21,18,.45);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  z-index:200;display:none;align-items:center;justify-content:center;padding:24px;
 }
-
-.modal-overlay.open {
-  display: flex;
-  animation: overlayFadeIn 0.25s ease;
-}
-
-@keyframes overlayFadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
+.modal-overlay.open{display:flex;animation:overlayFadeIn .25s ease;}
+@keyframes overlayFadeIn{from{opacity:0}to{opacity:1}}
 .modal {
-  background: rgba(255,252,249,0.95);
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
-  border-radius: 24px;
-  padding: 36px 32px;
-  width: 100%;
-  max-width: 500px;
-  box-shadow: 0 32px 80px rgba(26,21,18,0.2), 0 8px 24px rgba(160,120,90,0.1);
-  animation: modalScaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  max-height: 90vh;
-  overflow-y: auto;
-  border: 1px solid rgba(232,226,218,0.4);
+  background:rgba(255,252,249,.97);backdrop-filter:blur(20px) saturate(160%);
+  border-radius:24px;padding:36px 32px;width:100%;max-width:500px;
+  box-shadow:0 32px 80px rgba(26,21,18,.2),0 8px 24px rgba(160,120,90,.1);
+  animation:modalScaleIn .4s cubic-bezier(.34,1.56,.64,1);
+  max-height:92vh;overflow-y:auto;border:1px solid rgba(232,226,218,.4);
 }
+@keyframes modalScaleIn{from{opacity:0;transform:scale(.92) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal-title{font-size:20px;font-weight:700;color:var(--ink);margin-bottom:28px;letter-spacing:-.4px;}
+.modal-footer{display:flex;gap:12px;margin-top:28px;}
+.modal-footer .btn-outline,.modal-footer .btn-solid{flex:1;justify-content:center;}
 
-@keyframes modalScaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.92) translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
-.modal-title {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--ink);
-  margin-bottom: 28px;
-  letter-spacing: -0.4px;
-}
-
-.modal-footer {
-  display: flex;
-  gap: 12px;
-  margin-top: 28px;
-}
-
-.modal-footer .btn-outline {
-  flex: 1;
-  justify-content: center;
-}
-
-.modal-footer .btn-solid {
-  flex: 1;
-  justify-content: center;
-}
-
-/* Order Modal Details */
-.order-modal-info {
-  margin-bottom: 22px;
-}
-
-.order-info-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 11px 0;
-  border-bottom: 1px solid var(--border);
-  font-size: 13px;
-}
-
-.order-info-row:last-child {
-  border-bottom: none;
-}
-
-.order-info-key {
-  color: var(--ink-60);
-  font-weight: 450;
-}
-
-.order-info-val {
-  font-weight: 500;
-  color: var(--ink);
-}
-
-.order-items-list {
-  margin: 18px 0;
-}
-
-.order-item-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 9px 0;
-  font-size: 13px;
-  border-bottom: 1px solid var(--border);
-}
-
-.order-item-row:last-child {
-  border-bottom: none;
-}
-
+/* ORDER MODAL */
+.order-modal-info{margin-bottom:22px;}
+.order-info-row{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.order-info-row:last-child{border-bottom:none;}
+.order-info-key{color:var(--ink-60);font-weight:450;}
+.order-info-val{font-weight:500;color:var(--ink);}
+.order-items-list{margin:18px 0;}
+.order-item-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;font-size:13px;border-bottom:1px solid var(--border);}
+.order-item-row:last-child{border-bottom:none;}
 .status-select {
-  width: 100%;
-  height: 50px;
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius-xs);
-  padding: 0 18px;
-  font-size: 14px;
-  font-family: 'Inter', sans-serif;
-  color: var(--ink);
-  background: var(--surface);
-  outline: none;
-  margin-top: 18px;
-  cursor: pointer;
-  transition: all var(--transition-fast);
+  width:100%;height:50px;border:1.5px solid var(--border);border-radius:var(--radius-xs);
+  padding:0 18px;font-size:14px;font-family:'Inter',sans-serif;color:var(--ink);
+  background:var(--surface);outline:none;margin-top:18px;cursor:pointer;transition:all var(--transition-fast);
 }
+.status-select:focus{border-color:var(--copper);box-shadow:0 0 0 4px rgba(160,120,90,.08);}
 
-.status-select:hover {
-  border-color: #D0C8BE;
+/* PHOTO UPLOAD */
+.photo-upload-area {
+  border:2px dashed var(--border);border-radius:14px;padding:20px;
+  text-align:center;cursor:pointer;transition:all var(--transition-fast);
+  background:var(--white);margin-bottom:12px;
 }
-
-.status-select:focus {
-  border-color: var(--copper);
-  box-shadow: 0 0 0 4px rgba(160,120,90,0.08);
+.photo-upload-area:hover{border-color:var(--copper);background:var(--copper-ultra);}
+.photo-upload-area.drag{border-color:var(--copper);background:var(--copper-ultra);}
+.photo-preview {
+  width:100%;height:160px;border-radius:12px;overflow:hidden;
+  margin-bottom:12px;display:none;position:relative;
 }
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   ANIMATIONS
-   ═══════════════════════════════════════════════════════════════════════════ */
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(18px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.photo-preview img{width:100%;height:100%;object-fit:cover;}
+.photo-preview-remove {
+  position:absolute;top:8px;right:8px;width:28px;height:28px;
+  background:rgba(26,21,18,.6);border:none;border-radius:50%;
+  color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all var(--transition-fast);
 }
+.photo-preview-remove:hover{background:var(--red);}
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+/* POPULAR TOGGLE */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-top:1px solid var(--border);margin-top:4px;}
+.toggle-label{font-size:13px;font-weight:500;color:var(--ink);}
+.toggle-sub{font-size:11px;color:var(--ink-60);margin-top:1px;}
+.toggle {
+  width:44px;height:26px;background:var(--border);border-radius:13px;
+  position:relative;cursor:pointer;transition:background var(--transition-fast);border:none;flex-shrink:0;
 }
-
-@keyframes modalIn {
-  from {
-    opacity: 0;
-    transform: scale(0.94);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+.toggle.on{background:var(--copper);}
+.toggle::after {
+  content:'';position:absolute;width:20px;height:20px;background:white;
+  border-radius:50%;top:3px;left:3px;transition:transform var(--transition-fast);
+  box-shadow:0 1px 4px rgba(0,0,0,.15);
 }
+.toggle.on::after{transform:translateX(18px);}
 
-@keyframes shimmer {
-  from {
-    background-position: 200% 0;
-  }
-  to {
-    background-position: -200% 0;
-  }
+/* ANIMATIONS */
+@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+@keyframes pulse-green{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes pulse-dot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.5);opacity:.6}}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+
+/* RESPONSIVE */
+@media(max-width:640px){
+  .main{padding:20px 16px;}
+  .stats-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
+  .stat-card{padding:18px 16px;}
+  .stat-value{font-size:32px;}
+  .products-grid{grid-template-columns:1fr;}
+  .nav-tab{padding:0 12px;font-size:12px;}
+  .modal{padding:24px 20px;}
+  .login-card{padding:36px 24px;}
+  .header{padding:0 16px;}
+  .nav-wrap{padding:0 16px;}
 }
-
-@keyframes pulse-green {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.35;
-  }
-}
-
-@keyframes pulse-dot {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.5);
-    opacity: 0.6;
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   SCROLLBAR
-   ═══════════════════════════════════════════════════════════════════════════ */
-::-webkit-scrollbar {
-  width: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #D0C8BE;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   RESPONSIVE
-   ═══════════════════════════════════════════════════════════════════════════ */
-@media (max-width: 640px) {
-  .header-inner {
-    padding: 0;
-  }
-
-  .main {
-    padding: 20px 16px;
-  }
-
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-  }
-
-  .stat-card {
-    padding: 18px 16px;
-  }
-
-  .stat-value {
-    font-size: 32px;
-  }
-
-  .products-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .nav-tab {
-    padding: 0 12px;
-    font-size: 12px;
-  }
-
-  .modal {
-    padding: 24px 20px;
-  }
-
-  .login-card {
-    padding: 36px 24px;
-  }
-
-  .header {
-    padding: 0 16px;
-  }
-
-  .nav-wrap {
-    padding: 0 16px;
-  }
-}
-
-@media (min-width: 1024px) {
-  .stats-grid {
-    grid-template-columns: repeat(5, 1fr);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-  }
-}
+@media(min-width:1024px){.stats-grid{grid-template-columns:repeat(5,1fr);}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;}}
 </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════════════════════════════════════
-     LOGIN SCREEN
-     ═══════════════════════════════════════════════════════════════════════════ -->
+<!-- LOGIN -->
 <div id="loginScreen">
   <div class="login-card">
-    <div class="login-mark">
-      <i data-lucide="utensils" style="width:24px;height:24px"></i>
-    </div>
+    <div class="login-mark"><i data-lucide="utensils" style="width:24px;height:24px"></i></div>
     <div class="login-title">Apex Pizza</div>
     <div class="login-sub">Панель управления рестораном</div>
     <div class="field-wrap">
@@ -1361,25 +383,17 @@ body::after {
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════════════════════
-     APPLICATION
-     ═══════════════════════════════════════════════════════════════════════════ -->
+<!-- APP -->
 <div id="appScreen">
-  <!-- HEADER -->
   <header class="header">
     <div class="header-inner">
       <div class="header-brand">
-        <div class="brand-icon">
-          <i data-lucide="utensils" style="width:18px;height:18px"></i>
-        </div>
+        <div class="brand-icon"><i data-lucide="utensils" style="width:18px;height:18px"></i></div>
         <span class="brand-name">Apex Pizza</span>
       </div>
       <div class="header-right">
-        <div class="live-badge">
-          <div class="live-dot"></div>
-          LIVE
-        </div>
-        <button class="sound-btn" id="soundBtn" onclick="toggleSound()" title="Звук уведомлений">
+        <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+        <button class="sound-btn" id="soundBtn" onclick="toggleSound()">
           <i data-lucide="volume-2" style="width:14px;height:14px"></i>
         </button>
         <button class="logout-btn" onclick="doLogout()">Выйти</button>
@@ -1387,7 +401,6 @@ body::after {
     </div>
   </header>
 
-  <!-- NAVIGATION -->
   <nav class="nav-wrap">
     <div class="nav-inner">
       <button class="nav-tab active" onclick="showPage('orders',this)" data-page="orders">
@@ -1406,10 +419,9 @@ body::after {
     </div>
   </nav>
 
-  <!-- MAIN CONTENT -->
   <main class="main">
 
-    <!-- ORDERS PAGE -->
+    <!-- ORDERS -->
     <div class="page active" id="page-orders">
       <div class="filters">
         <button class="filter-btn active" onclick="filterOrders('all',this)">Все</button>
@@ -1424,25 +436,23 @@ body::after {
       <div class="orders-list" id="ordersList"></div>
     </div>
 
-    <!-- MENU PAGE -->
+    <!-- MENU -->
     <div class="page" id="page-menu">
       <div class="menu-header">
         <div class="section-title">Меню</div>
         <div class="btn-group">
           <button class="btn-outline" onclick="openModal('category')">
-            <i data-lucide="plus" style="width:14px;height:14px"></i>
-            Категория
+            <i data-lucide="plus" style="width:14px;height:14px"></i>Категория
           </button>
           <button class="btn-solid" onclick="openModal('product')">
-            <i data-lucide="plus" style="width:14px;height:14px"></i>
-            Блюдо
+            <i data-lucide="plus" style="width:14px;height:14px"></i>Блюдо
           </button>
         </div>
       </div>
       <div id="menuList"></div>
     </div>
 
-    <!-- STATS PAGE -->
+    <!-- STATS -->
     <div class="page" id="page-stats">
       <div class="stats-grid" id="statsGrid">
         <div class="stat-card" style="animation-delay:0ms">
@@ -1476,9 +486,7 @@ body::after {
   </main>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════════════════════
-     ORDER DETAIL MODAL
-     ═══════════════════════════════════════════════════════════════════════════ -->
+<!-- ORDER MODAL -->
 <div class="modal-overlay" id="orderModal" onclick="closeModal('order')">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-title" id="orderModalTitle">Заказ #0</div>
@@ -1500,9 +508,7 @@ body::after {
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════════════════════
-     CATEGORY MODAL
-     ═══════════════════════════════════════════════════════════════════════════ -->
+<!-- CATEGORY MODAL -->
 <div class="modal-overlay" id="categoryModal" onclick="closeModal('category')">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-title">Новая категория</div>
@@ -1521,12 +527,11 @@ body::after {
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════════════════════
-     PRODUCT MODAL
-     ═══════════════════════════════════════════════════════════════════════════ -->
+<!-- PRODUCT MODAL -->
 <div class="modal-overlay" id="productModal" onclick="closeModal('product')">
   <div class="modal" onclick="event.stopPropagation()">
-    <div class="modal-title">Новое блюдо</div>
+    <div class="modal-title" id="productModalTitle">Новое блюдо</div>
+
     <div class="field-wrap">
       <label class="field-label">Категория</label>
       <select id="prodCat" class="status-select" style="margin-top:0"></select>
@@ -1543,10 +548,39 @@ body::after {
       <label class="field-label">Цена (сум)</label>
       <input type="number" id="prodPrice" class="field-input" placeholder="0">
     </div>
+
+    <!-- ФОТО -->
     <div class="field-wrap">
-      <label class="field-label">Ссылка на фото</label>
-      <input type="text" id="prodImg" class="field-input" placeholder="https://...">
+      <label class="field-label">Фото</label>
+      <div class="photo-preview" id="photoPreview">
+        <img id="photoPreviewImg" src="" alt="Превью">
+        <button class="photo-preview-remove" onclick="removePhoto()">
+          <i data-lucide="x" style="width:12px;height:12px"></i>
+        </button>
+      </div>
+      <div class="photo-upload-area" id="photoUploadArea" onclick="document.getElementById('photoFile').click()">
+        <i data-lucide="image-plus" style="width:28px;height:28px;color:var(--copper-light);margin-bottom:8px"></i>
+        <div style="font-size:13px;font-weight:500;color:var(--ink-60)">Нажмите чтобы выбрать фото</div>
+        <div style="font-size:11px;color:var(--ink-30);margin-top:4px">JPG, PNG до 5 МБ</div>
+      </div>
+      <input type="file" id="photoFile" accept="image/*" style="display:none" onchange="handlePhotoFile(event)">
+      <div style="display:flex;align-items:center;gap:10px;margin:10px 0">
+        <div style="flex:1;height:1px;background:var(--border)"></div>
+        <span style="font-size:11px;color:var(--ink-30);font-weight:500">или ссылка</span>
+        <div style="flex:1;height:1px;background:var(--border)"></div>
+      </div>
+      <input type="text" id="prodImg" class="field-input" placeholder="https://images.unsplash.com/..." oninput="handleImgUrl(this.value)" style="margin-bottom:0">
     </div>
+
+    <!-- ПОПУЛЯРНОЕ -->
+    <div class="toggle-row">
+      <div>
+        <div class="toggle-label">Популярное блюдо</div>
+        <div class="toggle-sub">Показывать в блоке "Популярное"</div>
+      </div>
+      <button class="toggle" id="popularToggle" onclick="this.classList.toggle('on')"></button>
+    </div>
+
     <div class="modal-footer">
       <button class="btn-outline" onclick="closeModal('product')">Отмена</button>
       <button class="btn-solid" onclick="saveProduct()">Сохранить</button>
@@ -1554,9 +588,6 @@ body::after {
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════════════════════
-     JAVASCRIPT (100% сохранён)
-     ═══════════════════════════════════════════════════════════════════════════ -->
 <script>
 const API = '';
 let token = localStorage.getItem('ff_token') || '';
@@ -1567,6 +598,8 @@ let autoRefresh = null;
 let soundEnabled = localStorage.getItem('ff_sound') !== 'false';
 let prevNewCount = 0;
 let categories = [];
+let editingProductId = null;
+let photoBase64 = null;
 
 // ── AUDIO ──
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1595,27 +628,27 @@ function toggleSound() {
   lucide.createIcons();
 }
 
-// ── TIME ──
+// ── TIME — исправлена "Invalid Date" ──
 function timeAgo(dateStr) {
-  const d = new Date(dateStr);
+  if (!dateStr) return '—';
+  // Поддержка форматов с и без Z
+  const d = new Date(dateStr.endsWith('Z') ? dateStr : dateStr + 'Z');
+  if (isNaN(d.getTime())) return '—';
   const now = new Date();
   const diff = Math.floor((now - d) / 1000);
   if (diff < 60) return 'только что';
   if (diff < 3600) return Math.floor(diff/60) + ' мин назад';
   if (diff < 86400) return Math.floor(diff/3600) + ' ч назад';
-  return d.toLocaleDateString('ru');
+  return d.toLocaleDateString('ru-RU', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
 }
 
-// ── ANIMATE NUMBER ──
+// ── ANIMATE ──
 function animateNum(el, target) {
-  const start = 0;
-  const dur = 800;
-  const t0 = performance.now();
-  const fmt = n => n >= 1000 ? (n/1000).toFixed(0)+'K' : n;
+  const dur = 800; const t0 = performance.now();
   function step(t) {
-    const p = Math.min((t - t0) / dur, 1);
-    const ease = 1 - Math.pow(1 - p, 3);
-    el.textContent = fmt(Math.round(start + (target - start) * ease));
+    const p = Math.min((t-t0)/dur, 1);
+    const ease = 1 - Math.pow(1-p, 3);
+    el.textContent = Math.round(target * ease);
     if (p < 1) requestAnimationFrame(step);
   }
   requestAnimationFrame(step);
@@ -1629,9 +662,8 @@ async function doLogin() {
   err.style.display = 'none';
   try {
     const fd = new FormData();
-    fd.append('username', u);
-    fd.append('password', p);
-    const r = await fetch(`${API}/api/login`, { method: 'POST', body: fd });
+    fd.append('username', u); fd.append('password', p);
+    const r = await fetch(`${API}/api/login`, { method:'POST', body:fd });
     if (!r.ok) throw new Error();
     const d = await r.json();
     token = d.access_token;
@@ -1641,23 +673,18 @@ async function doLogin() {
 }
 
 function doLogout() {
-  token = '';
-  localStorage.removeItem('ff_token');
+  token = ''; localStorage.removeItem('ff_token');
   clearInterval(autoRefresh);
   document.getElementById('appScreen').style.display = 'none';
   document.getElementById('loginScreen').style.display = 'flex';
 }
 
-// ── INIT ──
 function showApp() {
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('appScreen').style.display = 'block';
   lucide.createIcons();
-  loadOrders();
-  loadMenu();
-  autoRefresh = setInterval(() => {
-    loadOrders();
-  }, 15000);
+  loadOrders(); loadMenu();
+  autoRefresh = setInterval(() => loadOrders(), 15000);
   if (!soundEnabled) {
     document.getElementById('soundBtn').classList.add('muted');
     document.getElementById('soundBtn').innerHTML = '<i data-lucide="volume-x" style="width:14px;height:14px"></i>';
@@ -1667,17 +694,14 @@ function showApp() {
 
 if (token) showApp();
 
-// ── KEYBOARD SHORTCUTS ──
 document.addEventListener('keydown', e => {
   if (e.key === '1') showPage('orders', document.querySelector('[data-page=orders]'));
   if (e.key === '2') showPage('menu', document.querySelector('[data-page=menu]'));
   if (e.key === '3') showPage('stats', document.querySelector('[data-page=stats]'));
-  if (e.key === 'Escape') {
-    closeModal('order'); closeModal('category'); closeModal('product');
-  }
+  if (e.key === 'Escape') { closeModal('order'); closeModal('category'); closeModal('product'); }
 });
 
-// ── NAVIGATION ──
+// ── NAV ──
 function showPage(name, btn) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
@@ -1688,93 +712,73 @@ function showPage(name, btn) {
 
 // ── ORDERS ──
 function showSkeleton() {
-  const list = document.getElementById('ordersList');
-  list.innerHTML = [1,2,3].map(() => `
+  document.getElementById('ordersList').innerHTML = [1,2,3].map(() => `
     <div class="skeleton-card">
       <div class="skeleton" style="height:12px;width:30%;margin-bottom:12px"></div>
       <div class="skeleton" style="height:14px;width:60%;margin-bottom:8px"></div>
       <div class="skeleton" style="height:12px;width:40%"></div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
 async function loadOrders() {
   if (!token) return;
-  if (allOrders.length === 0) showSkeleton();
+  if (!allOrders.length) showSkeleton();
   try {
-    const r = await fetch(`${API}/api/orders`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
+    const r = await fetch(`${API}/api/orders`, { headers:{ Authorization:`Bearer ${token}` } });
     if (!r.ok) { if (r.status === 401) doLogout(); return; }
     const data = await r.json();
-
     const newCount = data.filter(o => o.status === 'new').length;
     if (newCount > prevNewCount && allOrders.length > 0) playNotif();
     prevNewCount = newCount;
-
     const badge = document.getElementById('newOrdersBadge');
     badge.textContent = newCount;
     badge.classList.toggle('visible', newCount > 0);
-
     allOrders = data;
-    renderOrders();
-    renderStats();
+    renderOrders(); renderStats();
   } catch(e) {}
 }
 
 function renderOrders() {
   const list = document.getElementById('ordersList');
-  const filtered = currentFilter === 'all'
-    ? allOrders
-    : allOrders.filter(o => o.status === currentFilter);
-
+  const filtered = currentFilter === 'all' ? allOrders : allOrders.filter(o => o.status === currentFilter);
   if (!filtered.length) {
-    list.innerHTML = `
-      <div class="empty-state">
-        <svg class="empty-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
-          <rect x="12" y="8" width="40" height="48" rx="4"/>
-          <line x1="22" y1="22" x2="42" y2="22"/>
-          <line x1="22" y1="30" x2="42" y2="30"/>
-          <line x1="22" y1="38" x2="34" y2="38"/>
-        </svg>
-        <div class="empty-title">Заказов нет</div>
-        <div class="empty-sub">Новые заказы появятся здесь</div>
-      </div>`;
+    list.innerHTML = `<div class="empty-state">
+      <svg class="empty-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="12" y="8" width="40" height="48" rx="4"/>
+        <line x1="22" y1="22" x2="42" y2="22"/><line x1="22" y1="30" x2="42" y2="30"/><line x1="22" y1="38" x2="34" y2="38"/>
+      </svg>
+      <div class="empty-title">Заказов нет</div>
+      <div class="empty-sub">Новые заказы появятся здесь</div>
+    </div>`;
     return;
   }
-
   const statusMap = {
-    new: ['badge-new','Новый'],
-    accepted: ['badge-accepted','Принят'],
-    preparing: ['badge-preparing','Готовится'],
-    ready: ['badge-ready','Готов'],
-    delivering: ['badge-delivering','Доставляется'],
-    completed: ['badge-completed','Выполнен'],
-    cancelled: ['badge-cancelled','Отменён']
+    new:['badge-new','Новый'], accepted:['badge-accepted','Принят'],
+    preparing:['badge-preparing','Готовится'], ready:['badge-ready','Готов'],
+    delivering:['badge-delivering','Доставляется'], completed:['badge-completed','Выполнен'],
+    cancelled:['badge-cancelled','Отменён']
   };
-
   const now = Date.now();
   list.innerHTML = filtered.map((o, i) => {
     const [badgeClass, badgeText] = statusMap[o.status] || ['badge-new','Новый'];
-    const created = new Date(o.created_at);
+    const created = new Date(o.created_at ? (o.created_at.endsWith('Z') ? o.created_at : o.created_at + 'Z') : null);
     const isRecentNew = o.status === 'new' && (now - created.getTime()) < 10000;
     const items = o.items || [];
-    const itemsText = items.slice(0,2).map(it => it.product?.name || '').filter(Boolean).join(', ') + (items.length > 2 ? ` +${items.length-2}` : '');
-    return `
-      <div class="order-card status-${o.status} ${isRecentNew ? 'is-new-pulse' : ''}"
-           style="animation-delay:${i*40}ms"
-           onclick="openOrder(${o.id})">
-        <div class="order-header">
-          <span class="order-id">Заказ #${o.id}</span>
-          <span class="order-time">${timeAgo(o.created_at)}</span>
-        </div>
-        <div class="order-customer">${o.customer_name || 'Гость'}</div>
-        <div class="order-details">${o.phone || ''} ${itemsText ? '· ' + itemsText : ''}</div>
-        <div class="order-footer">
-          <span class="order-total">${(o.total_price||0).toLocaleString()} сум</span>
-          <span class="status-badge ${badgeClass}">${badgeText}</span>
-        </div>
-      </div>`;
+    // ФИX: показываем названия блюд
+    const itemsText = items.slice(0,2).map(it => it.product?.name || it.name || '').filter(Boolean).join(', ') + (items.length > 2 ? ` +${items.length-2}` : '');
+    return `<div class="order-card status-${o.status} ${isRecentNew ? 'is-new-pulse' : ''}"
+         style="animation-delay:${i*40}ms" onclick="openOrder(${o.id})">
+      <div class="order-header">
+        <span class="order-id">Заказ #${o.id}</span>
+        <span class="order-time">${timeAgo(o.created_at)}</span>
+      </div>
+      <div class="order-customer">${o.customer_name || 'Гость'}</div>
+      <div class="order-details">${o.phone || ''}${itemsText ? ' · ' + itemsText : ''}</div>
+      <div class="order-footer">
+        <span class="order-total">${(o.total_price||0).toLocaleString()} сум</span>
+        <span class="status-badge ${badgeClass}">${badgeText}</span>
+      </div>
+    </div>`;
   }).join('');
 }
 
@@ -1790,10 +794,6 @@ function openOrder(id) {
   const o = allOrders.find(x => x.id === id);
   if (!o) return;
   currentOrderId = id;
-  const statusNames = {
-    new:'Новый', accepted:'Принят', preparing:'Готовится',
-    ready:'Готов', delivering:'Доставляется', completed:'Выполнен', cancelled:'Отменён'
-  };
   document.getElementById('orderModalTitle').textContent = `Заказ #${o.id}`;
   document.getElementById('orderModalInfo').innerHTML = `
     <div class="order-info-row"><span class="order-info-key">Клиент</span><span class="order-info-val">${o.customer_name||'—'}</span></div>
@@ -1801,21 +801,17 @@ function openOrder(id) {
     <div class="order-info-row"><span class="order-info-key">Доставка</span><span class="order-info-val">${o.delivery_type==='delivery'?'Доставка':'Самовывоз'}</span></div>
     ${o.address ? `<div class="order-info-row"><span class="order-info-key">Адрес</span><span class="order-info-val">${o.address}</span></div>` : ''}
     ${o.comment ? `<div class="order-info-row"><span class="order-info-key">Комментарий</span><span class="order-info-val">${o.comment}</span></div>` : ''}
-    <div class="order-info-row"><span class="order-info-key">Оплата</span><span class="order-info-val">${o.payment_method||'—'}</span></div>
-  `;
+    <div class="order-info-row"><span class="order-info-key">Оплата</span><span class="order-info-val">${o.payment_method||'—'}</span></div>`;
   const items = o.items || [];
   document.getElementById('orderModalItems').innerHTML = `
-    <div style="font-size:11px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:var(--ink-60);margin-bottom:8px">Состав</div>
-    ${items.map(it => `
-      <div class="order-item-row">
-        <span>${it.product?.name||'Блюдо'} × ${it.quantity}</span>
-        <span style="font-weight:600">${((it.price||0)*it.quantity).toLocaleString()} сум</span>
-      </div>`).join('')}
+    <div style="font-size:11px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--ink-60);margin-bottom:8px">Состав</div>
+    ${items.map(it => `<div class="order-item-row">
+      <span>${it.product?.name || it.name || 'Блюдо'} × ${it.quantity}</span>
+      <span style="font-weight:600">${((it.price||0)*it.quantity).toLocaleString()} сум</span>
+    </div>`).join('')}
     <div class="order-item-row" style="font-weight:700;font-size:14px">
-      <span>Итого</span>
-      <span>${(o.total_price||0).toLocaleString()} сум</span>
-    </div>
-  `;
+      <span>Итого</span><span>${(o.total_price||0).toLocaleString()} сум</span>
+    </div>`;
   document.getElementById('orderStatusSelect').value = o.status;
   document.getElementById('orderModal').classList.add('open');
 }
@@ -1824,8 +820,8 @@ async function saveOrderStatus() {
   const status = document.getElementById('orderStatusSelect').value;
   try {
     const r = await fetch(`${API}/api/orders/${currentOrderId}/status`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      method:'PATCH',
+      headers:{'Content-Type':'application/json', Authorization:`Bearer ${token}`},
       body: JSON.stringify({ status })
     });
     if (r.ok) { closeModal('order'); loadOrders(); }
@@ -1847,23 +843,21 @@ async function loadMenu() {
 function renderMenu(data) {
   const el = document.getElementById('menuList');
   if (!data.length) {
-    el.innerHTML = `
-      <div class="empty-state">
-        <svg class="empty-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
-          <circle cx="32" cy="32" r="20"/>
-          <line x1="32" y1="22" x2="32" y2="42"/>
-          <line x1="22" y1="32" x2="42" y2="32"/>
-        </svg>
-        <div class="empty-title">Меню пусто</div>
-        <div class="empty-sub">Добавьте категорию, затем блюда</div>
-      </div>`;
+    el.innerHTML = `<div class="empty-state">
+      <svg class="empty-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="32" cy="32" r="20"/>
+        <line x1="32" y1="22" x2="32" y2="42"/><line x1="22" y1="32" x2="42" y2="32"/>
+      </svg>
+      <div class="empty-title">Меню пусто</div>
+      <div class="empty-sub">Добавьте категорию, затем блюда</div>
+    </div>`;
     return;
   }
   el.innerHTML = data.map((cat, ci) => `
     <div class="category-block" style="animation-delay:${ci*60}ms">
       <div class="category-title">
         <span>${cat.name}</span>
-        <button class="icon-btn danger" onclick="deleteCategory(${cat.id})" title="Удалить категорию">
+        <button class="icon-btn danger" onclick="deleteCategory(${cat.id})">
           <i data-lucide="trash-2" style="width:12px;height:12px"></i>
         </button>
       </div>
@@ -1871,15 +865,19 @@ function renderMenu(data) {
         ${(cat.products||[]).map((p, pi) => `
           <div class="product-card" style="animation-delay:${(ci*5+pi)*40}ms">
             <div class="product-img">
-              ${p.image_url ? `<img src="${p.image_url}" alt="${p.name}" onerror="this.parentElement.innerHTML='<i data-lucide=\\"utensils\\" style=\\"width:20px;height:20px\\"></i>';lucide.createIcons()">` :
-              '<i data-lucide="utensils" style="width:20px;height:20px"></i>'}
+              ${p.image_url
+                ? `<img src="${p.image_url}" alt="${p.name}" onerror="this.parentElement.innerHTML='<i data-lucide=utensils style=width:20px;height:20px></i>';lucide.createIcons()">`
+                : '<i data-lucide="utensils" style="width:20px;height:20px"></i>'}
             </div>
             <div class="product-info">
-              <div class="product-name">${p.name}</div>
+              <div class="product-name">${p.name}${p.is_popular ? ' ⭐' : ''}</div>
               <div class="product-desc">${p.description||''}</div>
               <div class="product-footer">
                 <span class="product-price">${(p.price||0).toLocaleString()} сум</span>
                 <div class="product-actions">
+                  <button class="icon-btn" onclick="editProduct(${p.id})" title="Редактировать">
+                    <i data-lucide="pencil" style="width:12px;height:12px"></i>
+                  </button>
                   <button class="icon-btn danger" onclick="deleteProduct(${p.id})" title="Удалить">
                     <i data-lucide="trash-2" style="width:12px;height:12px"></i>
                   </button>
@@ -1892,21 +890,23 @@ function renderMenu(data) {
   lucide.createIcons();
 }
 
-// ── STATS ──
+// ── STATS — исправлен подсчёт ──
 function renderStats() {
   const total = allOrders.length;
-  const revenue = allOrders.filter(o => o.status === 'completed').reduce((s,o) => s + (o.total_price||0), 0);
+  const revenue = allOrders
+    .filter(o => o.status === 'completed')
+    .reduce((s, o) => s + (o.total_price||0), 0);
   const newC = allOrders.filter(o => o.status === 'new').length;
   const completed = allOrders.filter(o => o.status === 'completed').length;
+  const todayStr = new Date().toDateString();
   const today = allOrders.filter(o => {
-    const d = new Date(o.created_at);
-    const n = new Date();
-    return d.toDateString() === n.toDateString();
+    if (!o.created_at) return false;
+    const d = new Date(o.created_at.endsWith('Z') ? o.created_at : o.created_at + 'Z');
+    return d.toDateString() === todayStr;
   }).length;
 
   animateNum(document.getElementById('statTotal'), total);
   animateNum(document.getElementById('statRevenue'), Math.round(revenue/1000));
-  document.querySelector('#statRevenue').nextElementSibling.textContent = 'тыс. сум';
   animateNum(document.getElementById('statNew'), newC);
   animateNum(document.getElementById('statCompleted'), completed);
   animateNum(document.getElementById('statToday'), today);
@@ -1919,17 +919,88 @@ function openModal(type) {
     document.getElementById('catSort').value = '0';
     document.getElementById('categoryModal').classList.add('open');
   } else if (type === 'product') {
+    editingProductId = null;
+    document.getElementById('productModalTitle').textContent = 'Новое блюдо';
     document.getElementById('prodName').value = '';
     document.getElementById('prodDesc').value = '';
     document.getElementById('prodPrice').value = '';
     document.getElementById('prodImg').value = '';
+    document.getElementById('popularToggle').classList.remove('on');
+    resetPhoto();
     document.getElementById('productModal').classList.add('open');
+    lucide.createIcons();
   }
 }
 
 function closeModal(type) {
   document.getElementById(type + 'Modal').classList.remove('open');
   if (type === 'order') currentOrderId = null;
+  if (type === 'product') { editingProductId = null; resetPhoto(); }
+}
+
+// ── PHOTO ──
+function handlePhotoFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    photoBase64 = ev.target.result;
+    showPhotoPreview(photoBase64);
+    document.getElementById('prodImg').value = '';
+  };
+  reader.readAsDataURL(file);
+}
+
+function handleImgUrl(url) {
+  if (!url) { resetPhoto(); return; }
+  photoBase64 = null;
+  showPhotoPreview(url);
+}
+
+function showPhotoPreview(src) {
+  const preview = document.getElementById('photoPreview');
+  const img = document.getElementById('photoPreviewImg');
+  const area = document.getElementById('photoUploadArea');
+  img.src = src;
+  preview.style.display = 'block';
+  area.style.display = 'none';
+}
+
+function removePhoto() {
+  resetPhoto();
+  document.getElementById('prodImg').value = '';
+  document.getElementById('photoFile').value = '';
+}
+
+function resetPhoto() {
+  photoBase64 = null;
+  document.getElementById('photoPreview').style.display = 'none';
+  document.getElementById('photoUploadArea').style.display = 'block';
+  document.getElementById('photoPreviewImg').src = '';
+}
+
+// ── EDIT PRODUCT ──
+function editProduct(id) {
+  let prod = null;
+  categories.forEach(c => { const p = (c.products||[]).find(x => x.id === id); if (p) prod = p; });
+  if (!prod) return;
+  editingProductId = id;
+  document.getElementById('productModalTitle').textContent = 'Редактировать блюдо';
+  document.getElementById('prodName').value = prod.name || '';
+  document.getElementById('prodDesc').value = prod.description || '';
+  document.getElementById('prodPrice').value = prod.price || '';
+  document.getElementById('prodImg').value = prod.image_url || '';
+  const toggle = document.getElementById('popularToggle');
+  toggle.classList.toggle('on', !!prod.is_popular);
+  // Категория
+  const sel = document.getElementById('prodCat');
+  if (prod.category_id) sel.value = prod.category_id;
+  // Фото превью
+  if (prod.image_url) showPhotoPreview(prod.image_url);
+  else resetPhoto();
+  photoBase64 = null;
+  document.getElementById('productModal').classList.add('open');
+  lucide.createIcons();
 }
 
 // ── SAVE CATEGORY ──
@@ -1939,9 +1010,9 @@ async function saveCategory() {
   if (!name) return;
   try {
     const r = await fetch(`${API}/api/categories`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ name, sort_order: sort, is_active: true })
+      method:'POST',
+      headers:{'Content-Type':'application/json', Authorization:`Bearer ${token}`},
+      body: JSON.stringify({ name, sort_order:sort, is_active:true })
     });
     if (r.ok) { closeModal('category'); loadMenu(); }
   } catch(e) {}
@@ -1949,38 +1020,64 @@ async function saveCategory() {
 
 // ── SAVE PRODUCT ──
 async function saveProduct() {
-  const name = document.getElementById('prodName').value.trim();
-  const desc = document.getElementById('prodDesc').value.trim();
+  const name  = document.getElementById('prodName').value.trim();
+  const desc  = document.getElementById('prodDesc').value.trim();
   const price = parseFloat(document.getElementById('prodPrice').value) || 0;
-  const img = document.getElementById('prodImg').value.trim();
   const catId = parseInt(document.getElementById('prodCat').value);
+  const isPopular = document.getElementById('popularToggle').classList.contains('on');
+  let imgUrl = document.getElementById('prodImg').value.trim() || null;
+
+  // Если загружен файл — используем base64 как URL (или можно оставить пустым)
+  // Для простоты: если есть base64 и нет URL — сохраняем base64 напрямую
+  if (photoBase64 && !imgUrl) imgUrl = photoBase64;
+
   if (!name || !catId) return;
+
+  const payload = {
+    name, description:desc, price,
+    image_url: imgUrl,
+    category_id: catId,
+    is_available: true,
+    is_popular: isPopular,
+    sort_order: 0,
+    options: []
+  };
+
   try {
-    const r = await fetch(`${API}/api/products`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify({
-        name, description: desc, price,
-        image_url: img || null,
-        category_id: catId,
-        is_available: true,
-        is_popular: false,
-        sort_order: 0,
-        options: []
-      })
-    });
+    let r;
+    if (editingProductId) {
+      r = await fetch(`${API}/api/products/${editingProductId}`, {
+        method:'PATCH',
+        headers:{'Content-Type':'application/json', Authorization:`Bearer ${token}`},
+        body: JSON.stringify(payload)
+      });
+    } else {
+      r = await fetch(`${API}/api/products`, {
+        method:'POST',
+        headers:{'Content-Type':'application/json', Authorization:`Bearer ${token}`},
+        body: JSON.stringify(payload)
+      });
+    }
     if (r.ok) { closeModal('product'); loadMenu(); }
+    else {
+      // Если PATCH не поддерживается — пробуем PUT
+      if (editingProductId) {
+        const r2 = await fetch(`${API}/api/products/${editingProductId}`, {
+          method:'PUT',
+          headers:{'Content-Type':'application/json', Authorization:`Bearer ${token}`},
+          body: JSON.stringify(payload)
+        });
+        if (r2.ok) { closeModal('product'); loadMenu(); }
+      }
+    }
   } catch(e) {}
 }
 
 // ── DELETE ──
 async function deleteCategory(id) {
-  if (!confirm('Удалить категорию?')) return;
+  if (!confirm('Удалить категорию и все её блюда?')) return;
   try {
-    await fetch(`${API}/api/categories/${id}`, {
-      method: 'DELETE',
-      headers: { Authorization: `Bearer ${token}` }
-    });
+    await fetch(`${API}/api/categories/${id}`, { method:'DELETE', headers:{ Authorization:`Bearer ${token}` } });
     loadMenu();
   } catch(e) {}
 }
@@ -1988,18 +1085,12 @@ async function deleteCategory(id) {
 async function deleteProduct(id) {
   if (!confirm('Удалить блюдо?')) return;
   try {
-    await fetch(`${API}/api/products/${id}`, {
-      method: 'DELETE',
-      headers: { Authorization: `Bearer ${token}` }
-    });
+    await fetch(`${API}/api/products/${id}`, { method:'DELETE', headers:{ Authorization:`Bearer ${token}` } });
     loadMenu();
   } catch(e) {}
 }
 
-// Enter key for login
-document.getElementById('loginPass').addEventListener('keydown', e => {
-  if (e.key === 'Enter') doLogin();
-});
+document.getElementById('loginPass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 </script>
 </body>
 </html>
