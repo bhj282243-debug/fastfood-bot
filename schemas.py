@@ -1,5 +1,5 @@
-from pydantic import BaseModel
-from typing import List, Optional
+from pydantic import BaseModel, field_validator
+from typing import List, Optional, Any
 
 # Схемы для Аутентификации
 class LoginRequest(BaseModel):
@@ -10,7 +10,7 @@ class Token(BaseModel):
     access_token: str
     token_type: str
 
-# Схемы для Меню (Категории и Продукты)
+# Схемы для Меню
 class ProductOptionBase(BaseModel):
     name: str
     price: float
@@ -29,6 +29,7 @@ class ProductCreate(ProductBase):
 
 class Product(ProductBase):
     id: int
+    is_popular: bool = False
     options: List[ProductOptionBase] = []
     class Config:
         from_attributes = True
@@ -64,12 +65,20 @@ class OrderCreate(BaseModel):
     comment: Optional[str] = None
     items: List[OrderItemCreate]
 
+class ProductShort(BaseModel):
+    id: int
+    name: str
+    image_url: Optional[str] = None
+    class Config:
+        from_attributes = True
+
 class OrderItem(BaseModel):
     id: int
     product_id: int
     quantity: int
     price: float
     options: Optional[str] = None
+    product: Optional[ProductShort] = None
     class Config:
         from_attributes = True
 
@@ -85,6 +94,7 @@ class Order(BaseModel):
     comment: Optional[str] = None
     status: str
     total_price: float
+    created_at: Optional[Any] = None
     items: List[OrderItem] = []
     class Config:
         from_attributes = True
