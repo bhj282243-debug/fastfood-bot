@@ -64,13 +64,28 @@ class OrderCreate(BaseModel):
     comment: Optional[str] = None
     items: List[OrderItemCreate]
 
+class OrderItem(BaseModel):
+    id: int
+    product_id: int
+    quantity: int
+    price: float
+    options: Optional[str] = None
+    class Config:
+        from_attributes = True
+
 class Order(BaseModel):
     id: int
     customer_name: str
     phone: str
+    address: Optional[str] = None
+    delivery_type: str
+    delivery_price: float
+    discount: float
+    payment_method: str
+    comment: Optional[str] = None
     status: str
     total_price: float
-    items: List[dict] = []
+    items: List[OrderItem] = []
     class Config:
         from_attributes = True
 
