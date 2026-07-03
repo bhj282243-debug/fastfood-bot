@@ -1,10 +1,12 @@
 import os
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from routers import menu, orders, auth
+from auth import get_current_admin
+from models import User
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -20,10 +22,18 @@ app = FastAPI(
     lifespan=lifespan
 )
 
+# ──────────────────────────────────────────────
+#  CORS — исправлено:
+#  allow_origins=["*"] несовместим с allow_credentials=True.
+#  Для одного домена указываем его явно через env,
+#  либо разрешаем без credentials (для публичного API).
+# ──────────────────────────────────────────────
+ALLOWED_ORIGIN = os.getenv("ALLOWED_ORIGIN", "*")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=[ALLOWED_ORIGIN],
+    allow_credentials=ALLOWED_ORIGIN != "*",  # credentials только если указан конкретный домен
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -36,44 +46,45 @@ app.include_router(auth.router, prefix="/api", tags=["Auth"])
 async def health():
     return {"status": "ok"}
 
+# ──────────────────────────────────────────────
+#  /api/setup — теперь требует авторизации.
+#  Используй только для смены пароля, не для первичного создания.
+#  Первичное создание: запусти init_db.py + создай пользователя вручную.
+# ──────────────────────────────────────────────
 @app.get("/api/setup")
-async def setup_admin():
-    """Создаёт/обновляет админа. Открыть один раз в браузере."""
+async def setup_admin(current_user: User = Depends(get_current_admin)):
+    """Обновляет пароль текущего админа. Требует авторизации."""
     try:
         from passlib.context import CryptContext
         from sqlalchemy.future import select
         from database import AsyncSessionLocal
-        from models import User
 
         pwd = CryptContext(schemes=["bcrypt"], deprecated="auto")
-        hashed = pwd.hash("admin123")
+        new_password = os.getenv("ADMIN_PASSWORD", "admin123")
+        hashed = pwd.hash(new_password)
 
         async with AsyncSessionLocal() as session:
-            result = await session.execute(select(User).filter(User.username == "admin"))
+            result = await session.execute(
+                select(User).filter(User.username == current_user.username)
+            )
             user = result.scalar_one_or_none()
             if user:
                 user.hashed_password = hashed
                 await session.commit()
-                return {"status": "ok", "message": "Пароль обновлён", "login": "admin", "password": "admin123"}
-            else:
-                new_user = User(
-                    username="admin",
-                    email="admin@fastfood.uz",
-                    hashed_password=hashed,
-                    is_active=True
-                )
-                session.add(new_user)
-                await session.commit()
-                return {"status": "ok", "message": "Админ создан", "login": "admin", "password": "admin123"}
+                return {"status": "ok", "message": "Пароль обновлён"}
+            return {"status": "error", "message": "Пользователь не найден"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+# ──────────────────────────────────────────────
+#  /api/seed — тоже требует авторизации.
+#  Случайный человек из интернета не должен сбрасывать меню.
+# ──────────────────────────────────────────────
 @app.get("/api/seed")
-async def seed_menu():
-    """Заполняет меню демо-данными с фото. Открыть один раз в браузере."""
+async def seed_menu(current_user: User = Depends(get_current_admin)):
+    """Заполняет меню демо-данными. Требует авторизации."""
     try:
         from sqlalchemy.future import select
-        from sqlalchemy.orm import selectinload
         from database import AsyncSessionLocal
         from models import Category, Product
 
@@ -247,7 +258,6 @@ async def seed_menu():
         ]
 
         async with AsyncSessionLocal() as session:
-            # Проверяем — если меню уже есть, не дублируем
             existing = await session.execute(select(Category))
             if existing.scalars().first():
                 return {
@@ -266,7 +276,7 @@ async def seed_menu():
                     is_active=True
                 )
                 session.add(cat)
-                await session.flush()  # получаем cat.id
+                await session.flush()
 
                 for p in products:
                     prod = Product(
