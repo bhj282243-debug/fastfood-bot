@@ -9,10 +9,9 @@ DATABASE_URL = os.getenv("DATABASE_URL", "postgresql+asyncpg://postgres:postgres
 if "?" in DATABASE_URL:
     DATABASE_URL = DATABASE_URL.split("?")[0]
 
-# SSL контекст для Neon
+# Корректный SSL для Neon — верификация сертификата включена
 ssl_context = ssl.create_default_context()
-ssl_context.check_hostname = False
-ssl_context.verify_mode = ssl.CERT_NONE
+# check_hostname=True и CERT_REQUIRED — значения по умолчанию, не отключаем
 
 engine = create_async_engine(
     DATABASE_URL,
@@ -30,6 +29,7 @@ AsyncSessionLocal = sessionmaker(
 )
 
 Base = declarative_base()
+
 
 async def get_db():
     async with AsyncSessionLocal() as session:
