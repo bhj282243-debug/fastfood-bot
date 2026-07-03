@@ -5,10 +5,16 @@ from sqlalchemy import delete, or_
 from sqlalchemy.orm import selectinload
 from typing import List, Optional
 from database import get_db
-from models import Product, Category, ProductOption
+from models import Product, Category, ProductOption, User
+from auth import get_current_admin
 import schemas
 
 router = APIRouter()
+
+# ──────────────────────────────────────────────
+#  ПУБЛИЧНЫЕ эндпоинты (без авторизации)
+#  Клиент читает меню — это нормально
+# ──────────────────────────────────────────────
 
 @router.get("/categories", response_model=List[schemas.Category])
 async def get_categories(db: AsyncSession = Depends(get_db)):
@@ -18,36 +24,6 @@ async def get_categories(db: AsyncSession = Depends(get_db)):
         .order_by(Category.sort_order)
     )
     return result.scalars().all()
-
-@router.post("/categories", response_model=schemas.Category)
-async def create_category(category_data: schemas.CategoryCreate, db: AsyncSession = Depends(get_db)):
-    new_category = Category(**category_data.model_dump())
-    db.add(new_category)
-    await db.commit()
-    await db.refresh(new_category)
-    return new_category
-
-@router.put("/categories/{category_id}", response_model=schemas.Category)
-async def update_category(category_id: int, category_data: schemas.CategoryCreate, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(Category).filter(Category.id == category_id))
-    category = result.scalar_one_or_none()
-    if not category:
-        raise HTTPException(status_code=404, detail="Category not found")
-    for key, value in category_data.model_dump().items():
-        setattr(category, key, value)
-    await db.commit()
-    await db.refresh(category)
-    return category
-
-@router.delete("/categories/{category_id}")
-async def delete_category(category_id: int, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(Category).filter(Category.id == category_id))
-    category = result.scalar_one_or_none()
-    if not category:
-        raise HTTPException(status_code=404, detail="Category not found")
-    await db.delete(category)
-    await db.commit()
-    return {"message": "Category deleted successfully"}
 
 @router.get("/menu", response_model=List[schemas.Category])
 async def get_menu(db: AsyncSession = Depends(get_db)):
@@ -102,8 +78,60 @@ async def get_product(product_id: int, db: AsyncSession = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Product not found")
     return product
 
+# ──────────────────────────────────────────────
+#  ЗАЩИЩЁННЫЕ эндпоинты (только для админа)
+#  Изменение меню требует авторизации
+# ──────────────────────────────────────────────
+
+@router.post("/categories", response_model=schemas.Category)
+async def create_category(
+    category_data: schemas.CategoryCreate,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_admin)
+):
+    new_category = Category(**category_data.model_dump())
+    db.add(new_category)
+    await db.commit()
+    await db.refresh(new_category)
+    return new_category
+
+@router.put("/categories/{category_id}", response_model=schemas.Category)
+async def update_category(
+    category_id: int,
+    category_data: schemas.CategoryCreate,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_admin)
+):
+    result = await db.execute(select(Category).filter(Category.id == category_id))
+    category = result.scalar_one_or_none()
+    if not category:
+        raise HTTPException(status_code=404, detail="Category not found")
+    for key, value in category_data.model_dump().items():
+        setattr(category, key, value)
+    await db.commit()
+    await db.refresh(category)
+    return category
+
+@router.delete("/categories/{category_id}")
+async def delete_category(
+    category_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_admin)
+):
+    result = await db.execute(select(Category).filter(Category.id == category_id))
+    category = result.scalar_one_or_none()
+    if not category:
+        raise HTTPException(status_code=404, detail="Category not found")
+    await db.delete(category)
+    await db.commit()
+    return {"message": "Category deleted successfully"}
+
 @router.post("/products", response_model=schemas.Product)
-async def create_product(product_data: schemas.ProductCreate, db: AsyncSession = Depends(get_db)):
+async def create_product(
+    product_data: schemas.ProductCreate,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_admin)
+):
     new_product = Product(**product_data.model_dump(exclude={'options'}))
     db.add(new_product)
     await db.commit()
@@ -122,7 +150,12 @@ async def create_product(product_data: schemas.ProductCreate, db: AsyncSession =
     return result.scalar_one()
 
 @router.put("/products/{product_id}", response_model=schemas.Product)
-async def update_product(product_id: int, product_data: schemas.ProductCreate, db: AsyncSession = Depends(get_db)):
+async def update_product(
+    product_id: int,
+    product_data: schemas.ProductCreate,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_admin)
+):
     result = await db.execute(select(Product).filter(Product.id == product_id))
     product = result.scalar_one_or_none()
     if not product:
@@ -144,7 +177,11 @@ async def update_product(product_id: int, product_data: schemas.ProductCreate, d
     return result.scalar_one()
 
 @router.delete("/products/{product_id}")
-async def delete_product(product_id: int, db: AsyncSession = Depends(get_db)):
+async def delete_product(
+    product_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_admin)
+):
     result = await db.execute(select(Product).filter(Product.id == product_id))
     product = result.scalar_one_or_none()
     if not product:
