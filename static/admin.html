@@ -53,6 +53,18 @@ body::before {
   position:fixed;top:0;left:0;right:0;z-index:1000;opacity:.5;
 }
 
+/* TOAST */
+.toast {
+  position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:var(--ink);color:white;padding:12px 22px;border-radius:30px;
+  font-size:13px;font-weight:500;z-index:9999;
+  opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);
+  pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.error{background:var(--red);}
+.toast.success{background:var(--green);}
+
 /* LOGIN */
 #loginScreen {
   min-height:100vh;display:flex;align-items:center;justify-content:center;
@@ -87,6 +99,7 @@ body::before {
 }
 .btn-primary:hover{background:#8B6449;transform:translateY(-1px);box-shadow:0 6px 20px rgba(139,100,73,.25);}
 .btn-primary:active{transform:translateY(1px);box-shadow:none;}
+.btn-primary:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none;}
 .login-error{font-size:13px;color:var(--red);margin-top:14px;display:none;text-align:center;font-weight:500;}
 
 /* HEADER */
@@ -219,6 +232,7 @@ body::before {
 }
 .btn-outline:hover{background:var(--copper);color:white;transform:translateY(-1px);box-shadow:0 4px 14px rgba(160,120,90,.2);}
 .btn-outline:active{transform:translateY(1px);box-shadow:none;}
+.btn-outline:disabled{opacity:.5;cursor:not-allowed;transform:none;}
 .btn-solid {
   height:42px;padding:0 20px;border:none;border-radius:var(--radius-xs);
   background:var(--copper);color:white;font-size:13px;font-weight:600;
@@ -227,6 +241,7 @@ body::before {
 }
 .btn-solid:hover{background:#8B6449;transform:translateY(-1px);box-shadow:0 6px 20px rgba(139,100,73,.25);}
 .btn-solid:active{transform:translateY(1px);box-shadow:none;}
+.btn-solid:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none;}
 .btn-group{display:flex;gap:10px;}
 .category-block{margin-bottom:36px;}
 .category-title {
@@ -298,6 +313,17 @@ body::before {
 }
 .status-select:focus{border-color:var(--copper);box-shadow:0 0 0 4px rgba(160,120,90,.08);}
 
+/* DELETE ORDER BTN */
+.btn-danger {
+  height:42px;padding:0 20px;border:1.5px solid var(--red);border-radius:var(--radius-xs);
+  background:transparent;color:var(--red);font-size:13px;font-weight:600;
+  font-family:'Inter',sans-serif;cursor:pointer;transition:all var(--transition-fast);
+  display:flex;align-items:center;gap:7px;
+}
+.btn-danger:hover{background:var(--red);color:white;transform:translateY(-1px);}
+.btn-danger:active{transform:translateY(1px);}
+.btn-danger:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+
 /* PHOTO UPLOAD */
 .photo-upload-area {
   border:2px dashed var(--border);border-radius:14px;padding:20px;
@@ -364,6 +390,9 @@ body::before {
 </head>
 <body>
 
+<!-- TOAST -->
+<div id="toast" class="toast"></div>
+
 <!-- LOGIN -->
 <div id="loginScreen">
   <div class="login-card">
@@ -378,7 +407,7 @@ body::before {
       <label class="field-label">Пароль</label>
       <input type="password" id="loginPass" class="field-input" placeholder="••••••••">
     </div>
-    <button class="btn-primary" onclick="doLogin()">Войти</button>
+    <button class="btn-primary" id="loginBtn" onclick="doLogin()">Войти</button>
     <div class="login-error" id="loginErr">Неверный логин или пароль</div>
   </div>
 </div>
@@ -501,9 +530,14 @@ body::before {
       <option value="completed">Выполнен</option>
       <option value="cancelled">Отменён</option>
     </select>
-    <div class="modal-footer">
-      <button class="btn-outline" onclick="closeModal('order')">Закрыть</button>
-      <button class="btn-solid" onclick="saveOrderStatus()">Сохранить</button>
+    <div class="modal-footer" style="flex-direction:column;gap:10px;">
+      <div style="display:flex;gap:12px;width:100%;">
+        <button class="btn-outline" style="flex:1;justify-content:center;" onclick="closeModal('order')">Закрыть</button>
+        <button class="btn-solid" style="flex:1;justify-content:center;" id="saveStatusBtn" onclick="saveOrderStatus()">Сохранить</button>
+      </div>
+      <button class="btn-danger" style="width:100%;justify-content:center;" id="deleteOrderBtn" onclick="deleteOrder()">
+        <i data-lucide="trash-2" style="width:14px;height:14px"></i>Удалить заказ
+      </button>
     </div>
   </div>
 </div>
@@ -522,7 +556,7 @@ body::before {
     </div>
     <div class="modal-footer">
       <button class="btn-outline" onclick="closeModal('category')">Отмена</button>
-      <button class="btn-solid" onclick="saveCategory()">Сохранить</button>
+      <button class="btn-solid" id="saveCategoryBtn" onclick="saveCategory()">Сохранить</button>
     </div>
   </div>
 </div>
@@ -583,7 +617,7 @@ body::before {
 
     <div class="modal-footer">
       <button class="btn-outline" onclick="closeModal('product')">Отмена</button>
-      <button class="btn-solid" onclick="saveProduct()">Сохранить</button>
+      <button class="btn-solid" id="saveProductBtn" onclick="saveProduct()">Сохранить</button>
     </div>
   </div>
 </div>
@@ -600,6 +634,27 @@ let prevNewCount = 0;
 let categories = [];
 let editingProductId = null;
 let photoBase64 = null;
+
+// ── TOAST ──
+let toastTimer;
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (type ? ' ' + type : '');
+  void t.offsetWidth;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+function apiErrorMsg(status) {
+  if (status === 401) return 'Сессия истекла. Войдите снова.';
+  if (status === 403) return 'Нет прав доступа.';
+  if (status === 404) return 'Объект не найден.';
+  if (status === 422) return 'Некорректные данные.';
+  if (status >= 500) return 'Ошибка сервера. Попробуйте позже.';
+  return 'Что-то пошло не так. Попробуйте ещё раз.';
+}
 
 // ── AUDIO ──
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -628,10 +683,9 @@ function toggleSound() {
   lucide.createIcons();
 }
 
-// ── TIME — исправлена "Invalid Date" ──
+// ── TIME ──
 function timeAgo(dateStr) {
   if (!dateStr) return '—';
-  // Поддержка форматов с и без Z
   const d = new Date(dateStr.endsWith('Z') ? dateStr : dateStr + 'Z');
   if (isNaN(d.getTime())) return '—';
   const now = new Date();
@@ -659,17 +713,25 @@ async function doLogin() {
   const u = document.getElementById('loginUser').value;
   const p = document.getElementById('loginPass').value;
   const err = document.getElementById('loginErr');
+  const btn = document.getElementById('loginBtn');
   err.style.display = 'none';
+  btn.disabled = true;
+  btn.textContent = 'Входим…';
   try {
     const fd = new FormData();
     fd.append('username', u); fd.append('password', p);
     const r = await fetch(`${API}/api/login`, { method:'POST', body:fd });
-    if (!r.ok) throw new Error();
+    if (!r.ok) throw new Error('auth');
     const d = await r.json();
     token = d.access_token;
     localStorage.setItem('ff_token', token);
     showApp();
-  } catch { err.style.display = 'block'; }
+  } catch {
+    err.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Войти';
+  }
 }
 
 function doLogout() {
@@ -725,7 +787,11 @@ async function loadOrders() {
   if (!allOrders.length) showSkeleton();
   try {
     const r = await fetch(`${API}/api/orders`, { headers:{ Authorization:`Bearer ${token}` } });
-    if (!r.ok) { if (r.status === 401) doLogout(); return; }
+    if (!r.ok) {
+      if (r.status === 401) { doLogout(); return; }
+      showToast(apiErrorMsg(r.status), 'error');
+      return;
+    }
     const data = await r.json();
     const newCount = data.filter(o => o.status === 'new').length;
     if (newCount > prevNewCount && allOrders.length > 0) playNotif();
@@ -735,7 +801,9 @@ async function loadOrders() {
     badge.classList.toggle('visible', newCount > 0);
     allOrders = data;
     renderOrders(); renderStats();
-  } catch(e) {}
+  } catch(e) {
+    showToast('Нет соединения с сервером', 'error');
+  }
 }
 
 function renderOrders() {
@@ -764,8 +832,7 @@ function renderOrders() {
     const created = new Date(o.created_at ? (o.created_at.endsWith('Z') ? o.created_at : o.created_at + 'Z') : null);
     const isRecentNew = o.status === 'new' && (now - created.getTime()) < 10000;
     const items = o.items || [];
-    // ФИX: показываем названия блюд
-    const itemsText = items.slice(0,2).map(it => it.product?.name || it.name || '').filter(Boolean).join(', ') + (items.length > 2 ? ` +${items.length-2}` : '');
+    const itemsText = items.slice(0,2).map(it => it.product?.name || '').filter(Boolean).join(', ') + (items.length > 2 ? ` +${items.length-2}` : '');
     return `<div class="order-card status-${o.status} ${isRecentNew ? 'is-new-pulse' : ''}"
          style="animation-delay:${i*40}ms" onclick="openOrder(${o.id})">
       <div class="order-header">
@@ -806,7 +873,7 @@ function openOrder(id) {
   document.getElementById('orderModalItems').innerHTML = `
     <div style="font-size:11px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--ink-60);margin-bottom:8px">Состав</div>
     ${items.map(it => `<div class="order-item-row">
-      <span>${it.product?.name || it.name || 'Блюдо'} × ${it.quantity}</span>
+      <span>${it.product?.name || 'Блюдо'} × ${it.quantity}</span>
       <span style="font-weight:600">${((it.price||0)*it.quantity).toLocaleString()} сум</span>
     </div>`).join('')}
     <div class="order-item-row" style="font-weight:700;font-size:14px">
@@ -814,30 +881,78 @@ function openOrder(id) {
     </div>`;
   document.getElementById('orderStatusSelect').value = o.status;
   document.getElementById('orderModal').classList.add('open');
+  lucide.createIcons();
 }
 
+// ── SAVE STATUS — только PATCH (backend поддерживает) ──
 async function saveOrderStatus() {
   const status = document.getElementById('orderStatusSelect').value;
+  const btn = document.getElementById('saveStatusBtn');
+  btn.disabled = true;
+  btn.textContent = 'Сохраняем…';
   try {
     const r = await fetch(`${API}/api/orders/${currentOrderId}/status`, {
       method:'PATCH',
       headers:{'Content-Type':'application/json', Authorization:`Bearer ${token}`},
       body: JSON.stringify({ status })
     });
-    if (r.ok) { closeModal('order'); loadOrders(); }
-  } catch(e) {}
+    if (r.ok) {
+      closeModal('order');
+      await loadOrders();
+      showToast('Статус обновлён', 'success');
+    } else {
+      showToast(apiErrorMsg(r.status), 'error');
+    }
+  } catch(e) {
+    showToast('Нет соединения с сервером', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Сохранить';
+  }
+}
+
+// ── DELETE ORDER ──
+async function deleteOrder() {
+  if (!currentOrderId) return;
+  if (!confirm(`Удалить заказ #${currentOrderId}? Это действие нельзя отменить.`)) return;
+  const btn = document.getElementById('deleteOrderBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i data-lucide="loader" style="width:14px;height:14px"></i>Удаляем…';
+  lucide.createIcons();
+  try {
+    const r = await fetch(`${API}/api/orders/${currentOrderId}`, {
+      method:'DELETE',
+      headers:{ Authorization:`Bearer ${token}` }
+    });
+    if (r.ok) {
+      closeModal('order');
+      await loadOrders();
+      showToast('Заказ удалён', 'success');
+    } else {
+      showToast(apiErrorMsg(r.status), 'error');
+    }
+  } catch(e) {
+    showToast('Нет соединения с сервером', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i data-lucide="trash-2" style="width:14px;height:14px"></i>Удалить заказ';
+    lucide.createIcons();
+  }
 }
 
 // ── MENU ──
 async function loadMenu() {
   try {
     const r = await fetch(`${API}/api/menu`);
+    if (!r.ok) { showToast('Не удалось загрузить меню', 'error'); return; }
     const data = await r.json();
     categories = data;
     renderMenu(data);
     const sel = document.getElementById('prodCat');
     sel.innerHTML = data.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
-  } catch(e) {}
+  } catch(e) {
+    showToast('Нет соединения с сервером', 'error');
+  }
 }
 
 function renderMenu(data) {
@@ -890,7 +1005,7 @@ function renderMenu(data) {
   lucide.createIcons();
 }
 
-// ── STATS — исправлен подсчёт ──
+// ── STATS ──
 function renderStats() {
   const total = allOrders.length;
   const revenue = allOrders
@@ -904,7 +1019,6 @@ function renderStats() {
     const d = new Date(o.created_at.endsWith('Z') ? o.created_at : o.created_at + 'Z');
     return d.toDateString() === todayStr;
   }).length;
-
   animateNum(document.getElementById('statTotal'), total);
   animateNum(document.getElementById('statRevenue'), Math.round(revenue/1000));
   animateNum(document.getElementById('statNew'), newC);
@@ -990,12 +1104,9 @@ function editProduct(id) {
   document.getElementById('prodDesc').value = prod.description || '';
   document.getElementById('prodPrice').value = prod.price || '';
   document.getElementById('prodImg').value = prod.image_url || '';
-  const toggle = document.getElementById('popularToggle');
-  toggle.classList.toggle('on', !!prod.is_popular);
-  // Категория
+  document.getElementById('popularToggle').classList.toggle('on', !!prod.is_popular);
   const sel = document.getElementById('prodCat');
   if (prod.category_id) sel.value = prod.category_id;
-  // Фото превью
   if (prod.image_url) showPhotoPreview(prod.image_url);
   else resetPhoto();
   photoBase64 = null;
@@ -1007,18 +1118,32 @@ function editProduct(id) {
 async function saveCategory() {
   const name = document.getElementById('catName').value.trim();
   const sort = parseInt(document.getElementById('catSort').value) || 0;
-  if (!name) return;
+  if (!name) { showToast('Введите название категории', 'error'); return; }
+  const btn = document.getElementById('saveCategoryBtn');
+  btn.disabled = true;
+  btn.textContent = 'Сохраняем…';
   try {
     const r = await fetch(`${API}/api/categories`, {
       method:'POST',
       headers:{'Content-Type':'application/json', Authorization:`Bearer ${token}`},
       body: JSON.stringify({ name, sort_order:sort, is_active:true })
     });
-    if (r.ok) { closeModal('category'); loadMenu(); }
-  } catch(e) {}
+    if (r.ok) {
+      closeModal('category');
+      await loadMenu();
+      showToast('Категория добавлена', 'success');
+    } else {
+      showToast(apiErrorMsg(r.status), 'error');
+    }
+  } catch(e) {
+    showToast('Нет соединения с сервером', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Сохранить';
+  }
 }
 
-// ── SAVE PRODUCT ──
+// ── SAVE PRODUCT — только PUT для редактирования ──
 async function saveProduct() {
   const name  = document.getElementById('prodName').value.trim();
   const desc  = document.getElementById('prodDesc').value.trim();
@@ -1026,15 +1151,13 @@ async function saveProduct() {
   const catId = parseInt(document.getElementById('prodCat').value);
   const isPopular = document.getElementById('popularToggle').classList.contains('on');
   let imgUrl = document.getElementById('prodImg').value.trim() || null;
-
-  // Если загружен файл — используем base64 как URL (или можно оставить пустым)
-  // Для простоты: если есть base64 и нет URL — сохраняем base64 напрямую
   if (photoBase64 && !imgUrl) imgUrl = photoBase64;
-
-  if (!name || !catId) return;
+  if (!name) { showToast('Введите название блюда', 'error'); return; }
+  if (!catId) { showToast('Выберите категорию', 'error'); return; }
+  if (price <= 0) { showToast('Укажите цену блюда', 'error'); return; }
 
   const payload = {
-    name, description:desc, price,
+    name, description: desc, price,
     image_url: imgUrl,
     category_id: catId,
     is_available: true,
@@ -1043,11 +1166,16 @@ async function saveProduct() {
     options: []
   };
 
+  const btn = document.getElementById('saveProductBtn');
+  btn.disabled = true;
+  btn.textContent = 'Сохраняем…';
+
   try {
     let r;
     if (editingProductId) {
+      // PUT для обновления — PATCH не реализован в backend
       r = await fetch(`${API}/api/products/${editingProductId}`, {
-        method:'PATCH',
+        method:'PUT',
         headers:{'Content-Type':'application/json', Authorization:`Bearer ${token}`},
         body: JSON.stringify(payload)
       });
@@ -1058,36 +1186,50 @@ async function saveProduct() {
         body: JSON.stringify(payload)
       });
     }
-    if (r.ok) { closeModal('product'); loadMenu(); }
-    else {
-      // Если PATCH не поддерживается — пробуем PUT
-      if (editingProductId) {
-        const r2 = await fetch(`${API}/api/products/${editingProductId}`, {
-          method:'PUT',
-          headers:{'Content-Type':'application/json', Authorization:`Bearer ${token}`},
-          body: JSON.stringify(payload)
-        });
-        if (r2.ok) { closeModal('product'); loadMenu(); }
-      }
+    if (r.ok) {
+      closeModal('product');
+      await loadMenu();
+      showToast(editingProductId ? 'Блюдо обновлено' : 'Блюдо добавлено', 'success');
+    } else {
+      showToast(apiErrorMsg(r.status), 'error');
     }
-  } catch(e) {}
+  } catch(e) {
+    showToast('Нет соединения с сервером', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Сохранить';
+  }
 }
 
 // ── DELETE ──
 async function deleteCategory(id) {
   if (!confirm('Удалить категорию и все её блюда?')) return;
   try {
-    await fetch(`${API}/api/categories/${id}`, { method:'DELETE', headers:{ Authorization:`Bearer ${token}` } });
-    loadMenu();
-  } catch(e) {}
+    const r = await fetch(`${API}/api/categories/${id}`, { method:'DELETE', headers:{ Authorization:`Bearer ${token}` } });
+    if (r.ok) {
+      await loadMenu();
+      showToast('Категория удалена', 'success');
+    } else {
+      showToast(apiErrorMsg(r.status), 'error');
+    }
+  } catch(e) {
+    showToast('Нет соединения с сервером', 'error');
+  }
 }
 
 async function deleteProduct(id) {
   if (!confirm('Удалить блюдо?')) return;
   try {
-    await fetch(`${API}/api/products/${id}`, { method:'DELETE', headers:{ Authorization:`Bearer ${token}` } });
-    loadMenu();
-  } catch(e) {}
+    const r = await fetch(`${API}/api/products/${id}`, { method:'DELETE', headers:{ Authorization:`Bearer ${token}` } });
+    if (r.ok) {
+      await loadMenu();
+      showToast('Блюдо удалено', 'success');
+    } else {
+      showToast(apiErrorMsg(r.status), 'error');
+    }
+  } catch(e) {
+    showToast('Нет соединения с сервером', 'error');
+  }
 }
 
 document.getElementById('loginPass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
