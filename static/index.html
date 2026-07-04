@@ -57,6 +57,63 @@ body::before {
   opacity: .7;
 }
 
+/* ════════ LOADING SCREEN ════════ */
+#loadingScreen {
+  position: fixed; inset: 0;
+  background: var(--white);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  z-index: 9999; gap: 20px;
+  transition: opacity .4s ease;
+}
+#loadingScreen.hide {
+  opacity: 0; pointer-events: none;
+}
+.loading-logo {
+  width: 64px; height: 64px;
+  background: linear-gradient(135deg, var(--ink) 0%, #3D3229 100%);
+  border-radius: 18px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--surface);
+  box-shadow: 0 8px 28px rgba(26,21,18,.18);
+  animation: loadingPulse 1.6s ease-in-out infinite;
+}
+@keyframes loadingPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 8px 28px rgba(26,21,18,.18); }
+  50% { transform: scale(1.05); box-shadow: 0 12px 36px rgba(26,21,18,.28); }
+}
+.loading-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px; font-weight: 700;
+  color: var(--ink); letter-spacing: -0.4px;
+}
+.loading-name span { color: var(--copper); }
+.loading-dots {
+  display: flex; gap: 7px;
+}
+.loading-dot {
+  width: 6px; height: 6px;
+  background: var(--copper-l); border-radius: 50%;
+  animation: dotBounce 1.2s ease-in-out infinite;
+}
+.loading-dot:nth-child(2) { animation-delay: .2s; }
+.loading-dot:nth-child(3) { animation-delay: .4s; }
+@keyframes dotBounce {
+  0%, 80%, 100% { transform: scale(1); opacity: .5; }
+  40% { transform: scale(1.4); opacity: 1; }
+}
+
+/* ════════ OFFLINE BANNER ════════ */
+#offlineBanner {
+  display: none;
+  position: fixed; top: 2px; left: 0; right: 0;
+  background: #B84032; color: white;
+  font-size: 12px; font-weight: 500;
+  text-align: center; padding: 8px 16px;
+  z-index: 500;
+}
+#offlineBanner.show { display: block; }
+
 /* ════════ HEADER ════════ */
 .header {
   position: sticky;
@@ -128,7 +185,6 @@ body::before {
   overflow: hidden;
 }
 
-/* тонкий орнамент фона */
 .hero::after {
   content: '';
   position: absolute;
@@ -172,7 +228,6 @@ body::before {
   background: var(--copper-l); flex-shrink: 0;
 }
 
-/* фото в hero */
 .hero-img-wrap {
   flex-shrink: 0;
   width: 120px; height: 120px;
@@ -299,14 +354,6 @@ body::before {
 }
 .prod-img img { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; }
 
-/* SVG placeholder */
-.prod-img-svg {
-  width: 100%; height: 100%;
-  display: flex; align-items: center; justify-content: center;
-  background: linear-gradient(135deg, var(--copper-ultra) 0%, var(--copper-pale) 100%);
-  border-radius: 12px;
-}
-
 .prod-body { flex: 1; min-width: 0; }
 
 .prod-name {
@@ -364,6 +411,31 @@ body::before {
   border-radius: var(--r); padding: 14px;
   display: flex; gap: 14px; align-items: center;
 }
+
+/* ════════ ERROR STATE ════════ */
+.error-state {
+  text-align: center; padding: 60px 24px;
+}
+.error-state-icon {
+  font-size: 40px; margin-bottom: 14px;
+}
+.error-state-title {
+  font-size: 16px; font-weight: 600; color: var(--ink);
+  margin-bottom: 8px; letter-spacing: -0.2px;
+}
+.error-state-sub {
+  font-size: 13px; color: var(--ink-60); margin-bottom: 20px; line-height: 1.5;
+}
+.retry-btn {
+  height: 44px; padding: 0 24px;
+  background: var(--copper); color: white; border: none;
+  border-radius: 11px; font-size: 13px; font-weight: 600;
+  font-family: 'Inter', sans-serif; cursor: pointer;
+  transition: all var(--transition);
+  display: inline-flex; align-items: center; gap: 7px;
+}
+.retry-btn:hover { background: #8B6449; transform: translateY(-1px); }
+.retry-btn:active { transform: translateY(1px); }
 
 /* ════════ CART BAR ════════ */
 .cart-bar {
@@ -536,6 +608,7 @@ body::before {
 }
 .field-input:hover { border-color: var(--border-2); }
 .field-input:focus { border-color: var(--copper); box-shadow: 0 0 0 3px rgba(160,120,90,.1); }
+.field-input.error { border-color: #B84032; }
 
 .field-wrap { margin-bottom: 4px; }
 
@@ -612,6 +685,7 @@ body::before {
   box-shadow: 0 4px 20px rgba(26,21,18,.25);
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.error { background: #B84032; }
 
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -624,7 +698,23 @@ body::before {
 </head>
 <body>
 
-<div id="mainView">
+<!-- LOADING SCREEN -->
+<div id="loadingScreen">
+  <div class="loading-logo">
+    <i data-lucide="zap" style="width:28px;height:28px"></i>
+  </div>
+  <div class="loading-name">Apex<span>Pizza</span></div>
+  <div class="loading-dots">
+    <div class="loading-dot"></div>
+    <div class="loading-dot"></div>
+    <div class="loading-dot"></div>
+  </div>
+</div>
+
+<!-- OFFLINE BANNER -->
+<div id="offlineBanner">Нет подключения к интернету</div>
+
+<div id="mainView" style="display:none">
 
   <!-- HEADER -->
   <header class="header">
@@ -675,20 +765,7 @@ body::before {
   <div id="menuAnchor"></div>
   <div class="sec-label" id="menuLabel">Всё меню</div>
 
-  <div class="products-list" id="productsList">
-    <div class="skel-card">
-      <div style="width:96px;height:96px;border-radius:13px;flex-shrink:0" class="skel"></div>
-      <div style="flex:1"><div style="height:13px;margin-bottom:9px;border-radius:6px" class="skel"></div><div style="height:11px;margin-bottom:7px;width:80%;border-radius:6px" class="skel"></div><div style="height:11px;width:45%;border-radius:6px" class="skel"></div></div>
-    </div>
-    <div class="skel-card">
-      <div style="width:96px;height:96px;border-radius:13px;flex-shrink:0" class="skel"></div>
-      <div style="flex:1"><div style="height:13px;margin-bottom:9px;border-radius:6px" class="skel"></div><div style="height:11px;margin-bottom:7px;width:70%;border-radius:6px" class="skel"></div><div style="height:11px;width:55%;border-radius:6px" class="skel"></div></div>
-    </div>
-    <div class="skel-card">
-      <div style="width:96px;height:96px;border-radius:13px;flex-shrink:0" class="skel"></div>
-      <div style="flex:1"><div style="height:13px;margin-bottom:9px;border-radius:6px" class="skel"></div><div style="height:11px;margin-bottom:7px;width:85%;border-radius:6px" class="skel"></div><div style="height:11px;width:40%;border-radius:6px" class="skel"></div></div>
-    </div>
-  </div>
+  <div class="products-list" id="productsList"></div>
 
   <!-- CART BAR -->
   <div class="cart-bar" id="cartBar" onclick="openDrawer()">
@@ -784,8 +861,21 @@ body::before {
 <script>
 const API = '';
 let menu = [], cart = {}, deliveryType = 'delivery';
+let orderSubmitting = false;
 
-// SVG плейсхолдер по первой букве названия
+// ── OFFLINE ──
+function updateOnlineStatus() {
+  const banner = document.getElementById('offlineBanner');
+  if (!navigator.onLine) {
+    banner.classList.add('show');
+  } else {
+    banner.classList.remove('show');
+  }
+}
+window.addEventListener('online', updateOnlineStatus);
+window.addEventListener('offline', updateOnlineStatus);
+
+// ── SVG PLACEHOLDER ──
 function svgPlaceholder(name) {
   const letter = (name || '?')[0].toUpperCase();
   const colors = [
@@ -801,17 +891,47 @@ function svgPlaceholder(name) {
   </svg>`;
 }
 
+// ── INIT ──
 async function init() {
   try {
     const r = await fetch(API + '/api/menu');
+    if (!r.ok) throw new Error('server');
     menu = await r.json();
     renderCats();
     renderPopular();
     renderList(null);
+    // Скрываем загрузочный экран
+    const ls = document.getElementById('loadingScreen');
+    ls.classList.add('hide');
+    setTimeout(() => { ls.style.display = 'none'; }, 400);
+    document.getElementById('mainView').style.display = 'block';
+    lucide.createIcons();
   } catch(e) {
-    document.getElementById('productsList').innerHTML =
-      '<p style="color:var(--ink-60);text-align:center;padding:48px 0;font-size:14px">Не удалось загрузить меню</p>';
+    const ls = document.getElementById('loadingScreen');
+    ls.classList.add('hide');
+    setTimeout(() => { ls.style.display = 'none'; }, 400);
+    document.getElementById('mainView').style.display = 'block';
+    const isOffline = !navigator.onLine;
+    document.getElementById('productsList').innerHTML = `
+      <div class="error-state">
+        <div class="error-state-icon">${isOffline ? '📡' : '🍕'}</div>
+        <div class="error-state-title">${isOffline ? 'Нет соединения' : 'Не удалось загрузить меню'}</div>
+        <div class="error-state-sub">${isOffline ? 'Проверьте подключение к интернету и попробуйте снова.' : 'Сервер временно недоступен. Попробуйте через несколько секунд.'}</div>
+        <button class="retry-btn" onclick="retryLoad()">
+          <i data-lucide="refresh-cw" style="width:14px;height:14px"></i>
+          Попробовать снова
+        </button>
+      </div>`;
+    lucide.createIcons();
   }
+}
+
+async function retryLoad() {
+  // Показываем скелетон при повторной попытке
+  document.getElementById('productsList').innerHTML = `
+    <div class="skel-card"><div style="width:96px;height:96px;border-radius:13px;flex-shrink:0" class="skel"></div><div style="flex:1"><div style="height:13px;margin-bottom:9px;border-radius:6px" class="skel"></div><div style="height:11px;margin-bottom:7px;width:80%;border-radius:6px" class="skel"></div></div></div>
+    <div class="skel-card"><div style="width:96px;height:96px;border-radius:13px;flex-shrink:0" class="skel"></div><div style="flex:1"><div style="height:13px;margin-bottom:9px;border-radius:6px" class="skel"></div><div style="height:11px;margin-bottom:7px;width:70%;border-radius:6px" class="skel"></div></div></div>`;
+  await init();
 }
 
 function renderCats() {
@@ -1027,16 +1147,50 @@ function setDel(type) {
   document.getElementById('addrWrap').style.display = type === 'delivery' ? 'block' : 'none';
 }
 
+// ── SUBMIT ORDER — защита от двойного нажатия ──
 async function submitOrder() {
-  const name    = document.getElementById('fName').value.trim();
-  const phone   = document.getElementById('fPhone').value.trim();
-  const address = document.getElementById('fAddress').value.trim();
+  if (orderSubmitting) return;
+
+  const nameEl    = document.getElementById('fName');
+  const phoneEl   = document.getElementById('fPhone');
+  const addressEl = document.getElementById('fAddress');
+  const name    = nameEl.value.trim();
+  const phone   = phoneEl.value.trim();
+  const address = addressEl.value.trim();
   const comment = document.getElementById('fComment').value.trim();
-  if (!name)  { showToast('Введите имя'); return; }
-  if (!phone) { showToast('Введите телефон'); return; }
-  if (deliveryType === 'delivery' && !address) { showToast('Введите адрес'); return; }
+
+  // Сброс ошибок
+  [nameEl, phoneEl, addressEl].forEach(el => el.classList.remove('error'));
+
+  if (!name) {
+    nameEl.classList.add('error');
+    showToast('Введите ваше имя', 'error');
+    nameEl.focus();
+    return;
+  }
+  if (!phone) {
+    phoneEl.classList.add('error');
+    showToast('Введите номер телефона', 'error');
+    phoneEl.focus();
+    return;
+  }
+  if (deliveryType === 'delivery' && !address) {
+    addressEl.classList.add('error');
+    showToast('Введите адрес доставки', 'error');
+    addressEl.focus();
+    return;
+  }
+
+  if (!navigator.onLine) {
+    showToast('Нет соединения с интернетом', 'error');
+    return;
+  }
+
+  orderSubmitting = true;
   const btn = document.getElementById('submitBtn');
-  btn.disabled = true; btn.textContent = 'Отправляем…';
+  btn.disabled = true;
+  btn.textContent = 'Отправляем…';
+
   try {
     const r = await fetch(API + '/api/orders', {
       method: 'POST',
@@ -1051,7 +1205,16 @@ async function submitOrder() {
         items: Object.values(cart).map(i => ({ product_id: i.product.id, quantity: i.qty }))
       })
     });
-    if (!r.ok) throw new Error();
+    if (!r.ok) {
+      const msg = r.status >= 500
+        ? 'Ошибка сервера. Попробуйте через минуту.'
+        : 'Не удалось создать заказ. Проверьте данные.';
+      showToast(msg, 'error');
+      btn.disabled = false;
+      btn.textContent = 'Подтвердить заказ';
+      orderSubmitting = false;
+      return;
+    }
     cart = {};
     updateCart();
     closeDrawer();
@@ -1059,8 +1222,14 @@ async function submitOrder() {
     document.getElementById('successView').style.display = 'block';
     lucide.createIcons();
   } catch(e) {
-    showToast('Ошибка. Попробуйте ещё раз');
-    btn.disabled = false; btn.textContent = 'Подтвердить заказ';
+    const msg = !navigator.onLine
+      ? 'Нет соединения с интернетом'
+      : 'Ошибка соединения. Попробуйте ещё раз.';
+    showToast(msg, 'error');
+    btn.disabled = false;
+    btn.textContent = 'Подтвердить заказ';
+  } finally {
+    orderSubmitting = false;
   }
 }
 
@@ -1072,11 +1241,14 @@ function backToMenu() {
 }
 
 let toastTimer;
-function showToast(msg) {
+function showToast(msg, type = '') {
   const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
+  t.textContent = msg;
+  t.className = 'toast' + (type ? ' ' + type : '');
+  void t.offsetWidth;
+  t.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
 }
 
 if ('serviceWorker' in navigator) {
