@@ -14,6 +14,25 @@ from auth import get_current_admin
 from models import User
 
 # ──────────────────────────────────────────────
+#  Sentry — мониторинг ошибок продакшена
+# ──────────────────────────────────────────────
+SENTRY_DSN = os.getenv("SENTRY_DSN", "")
+if SENTRY_DSN:
+    import sentry_sdk
+    from sentry_sdk.integrations.fastapi import FastApiIntegration
+    from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        integrations=[
+            FastApiIntegration(),
+            SqlalchemyIntegration(),
+        ],
+        traces_sample_rate=0.2,
+        environment=os.getenv("ENVIRONMENT", "production"),
+        send_default_pii=False,
+    )
+
+# ──────────────────────────────────────────────
 #  Настройка логирования
 # ──────────────────────────────────────────────
 logging.basicConfig(
@@ -71,6 +90,9 @@ async def unhandled_exception_handler(request: Request, exc: Exception):
         f"Необработанная ошибка: {request.method} {request.url} — {type(exc).__name__}: {exc}",
         exc_info=True
     )
+    if SENTRY_DSN:
+        import sentry_sdk
+        sentry_sdk.capture_exception(exc)
     return JSONResponse(
         status_code=500,
         content={"detail": "Внутренняя ошибка сервера. Мы уже разбираемся."}
