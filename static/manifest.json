@@ -1,11 +1,11 @@
 {
-  "name": "FastFood",
-  "short_name": "FastFood",
-  "description": "Быстрый заказ еды",
+  "name": "Apex Pizza",
+  "short_name": "Apex Pizza",
+  "description": "Заказ еды онлайн — быстро и удобно",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#1a1208",
-  "theme_color": "#ff6b35",
+  "background_color": "#F5F1EB",
+  "theme_color": "#1A1512",
   "orientation": "portrait",
   "icons": [
     {
