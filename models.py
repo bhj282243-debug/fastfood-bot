@@ -1,7 +1,8 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Boolean, JSON
+from sqlalchemy import Column, Integer, String, Float, Numeric, ForeignKey, DateTime, Boolean, JSON, Index
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from database import Base
+
 
 class User(Base):
     __tablename__ = "users"
@@ -12,6 +13,7 @@ class User(Base):
     hashed_password = Column(String)
     is_active = Column(Boolean, default=True)
     is_superuser = Column(Boolean, default=False)
+
 
 class Category(Base):
     __tablename__ = "categories"
@@ -25,6 +27,7 @@ class Category(Base):
 
     products = relationship("Product", back_populates="category", cascade="all, delete-orphan")
 
+
 class Product(Base):
     __tablename__ = "products"
 
@@ -37,12 +40,13 @@ class Product(Base):
     calories = Column(Integer, nullable=True)
     sort_order = Column(Integer, default=0)
     is_popular = Column(Boolean, default=False)
-    category_id = Column(Integer, ForeignKey("categories.id"))
+    category_id = Column(Integer, ForeignKey("categories.id"), index=True)
     is_available = Column(Boolean, default=True)
 
     category = relationship("Category", back_populates="products")
     options = relationship("ProductOption", back_populates="product", cascade="all, delete-orphan")
     order_items = relationship("OrderItem", back_populates="product")
+
 
 class ProductOption(Base):
     __tablename__ = "product_options"
@@ -53,6 +57,7 @@ class ProductOption(Base):
     price = Column(Float, default=0)
 
     product = relationship("Product", back_populates="options")
+
 
 class Order(Base):
     __tablename__ = "orders"
@@ -69,8 +74,10 @@ class Order(Base):
     status = Column(String, default="new", index=True)
     total_price = Column(Float, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow, index=True)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     items = relationship("OrderItem", back_populates="order", cascade="all, delete-orphan")
+
 
 class OrderItem(Base):
     __tablename__ = "order_items"
