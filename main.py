@@ -234,6 +234,16 @@ if os.path.exists("static"):
     app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
+@app.get("/manifest.json", include_in_schema=False)
+async def manifest():
+    return FileResponse("static/manifest.json", media_type="application/manifest+json")
+
+
+@app.get("/service-worker.js", include_in_schema=False)
+async def service_worker():
+    return FileResponse("static/service-worker.js", media_type="application/javascript")
+
+
 @app.get("/{full_path:path}")
 async def serve_spa(full_path: str):
     if full_path.startswith("api"):
