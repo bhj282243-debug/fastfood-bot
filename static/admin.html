@@ -840,7 +840,7 @@ function renderOrders() {
         <span class="order-time">${timeAgo(o.created_at)}</span>
       </div>
       <div class="order-customer">${o.customer_name || 'Гость'}</div>
-      <div class="order-details">${o.phone || ''}${itemsText ? ' · ' + itemsText : ''}</div>
+      <div class="order-details">${o.phone || ''}${o.table_number ? ' · 🪑 Стол №' + o.table_number : ''}${itemsText ? ' · ' + itemsText : ''}</div>
       <div class="order-footer">
         <span class="order-total">${(o.total_price||0).toLocaleString()} сум</span>
         <span class="status-badge ${badgeClass}">${badgeText}</span>
@@ -866,6 +866,7 @@ function openOrder(id) {
     <div class="order-info-row"><span class="order-info-key">Клиент</span><span class="order-info-val">${o.customer_name||'—'}</span></div>
     <div class="order-info-row"><span class="order-info-key">Телефон</span><span class="order-info-val">${o.phone||'—'}</span></div>
     <div class="order-info-row"><span class="order-info-key">Доставка</span><span class="order-info-val">${o.delivery_type==='delivery'?'Доставка':'Самовывоз'}</span></div>
+    ${o.table_number ? `<div class="order-info-row"><span class="order-info-key">Стол</span><span class="order-info-val">🪑 №${o.table_number}</span></div>` : ''}
     ${o.address ? `<div class="order-info-row"><span class="order-info-key">Адрес</span><span class="order-info-val">${o.address}</span></div>` : ''}
     ${o.comment ? `<div class="order-info-row"><span class="order-info-key">Комментарий</span><span class="order-info-val">${o.comment}</span></div>` : ''}
     <div class="order-info-row"><span class="order-info-key">Оплата</span><span class="order-info-val">${o.payment_method||'—'}</span></div>`;
