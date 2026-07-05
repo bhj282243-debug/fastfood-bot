@@ -115,13 +115,22 @@ body::before {
 #offlineBanner.show { display: block; }
 #tableBanner {
   display: none;
-  position: fixed; top: 0; left: 0; right: 0;
-  background: #2C6E49; color: white;
-  font-size: 13px; font-weight: 600;
-  text-align: center; padding: 9px 16px;
-  z-index: 499;
+  margin: 12px 16px 0;
+  background: #FFFDF9;
+  border: 1px solid #D4AF6A;
+  border-radius: 14px;
+  padding: 10px 20px;
+  text-align: center;
+  box-shadow: 0 2px 12px rgba(180,140,80,.10);
 }
 #tableBanner.show { display: block; }
+#tableBanner .tb-icon { font-size: 16px; }
+#tableBanner .tb-text {
+  font-size: 13px; font-weight: 600;
+  color: #2C211B; letter-spacing: .2px;
+  margin-top: 1px;
+}
+#tableBanner .tb-num { color: #B08A45; }
 
 /* ════════ HEADER ════════ */
 .header {
@@ -721,7 +730,6 @@ body::before {
 </div>
 
 <!-- OFFLINE BANNER -->
-<div id="tableBanner">🪑 Вы за столом №<span id="tableNumDisplay"></span></div>
 <div id="offlineBanner">Нет подключения к интернету</div>
 
 <div id="mainView" style="display:none">
@@ -739,6 +747,11 @@ body::before {
       <span class="cart-badge" id="cartBadge">0</span>
     </button>
   </header>
+
+  <div id="tableBanner">
+    <div class="tb-icon">🪑</div>
+    <div class="tb-text">Ваш стол <span class="tb-num">№<span id="tableNumDisplay"></span></span></div>
+  </div>
 
   <!-- HERO -->
   <div class="hero">
