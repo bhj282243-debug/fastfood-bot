@@ -33,11 +33,14 @@ async def send_order_notification(order):
         for item in order.items
     ])
 
+    table_line = f"🪑 Стол №{order.table_number}\n" if order.table_number else ""
+
     text = (
         f"🔔 *Новый заказ #{order.id}*\n\n"
         f"👤 {order.customer_name}\n"
         f"📞 {order.phone}\n"
         f"{delivery_label}\n"
+        f"{table_line}"
         f"📍 {order.address or 'Самовывоз'}\n\n"
         f"📋 *Состав:*\n{items_text}\n\n"
         f"💰 *Итого: {order.total_price:,.0f} сум*\n"
