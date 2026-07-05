@@ -113,6 +113,15 @@ body::before {
   z-index: 500;
 }
 #offlineBanner.show { display: block; }
+#tableBanner {
+  display: none;
+  position: fixed; top: 0; left: 0; right: 0;
+  background: #2C6E49; color: white;
+  font-size: 13px; font-weight: 600;
+  text-align: center; padding: 9px 16px;
+  z-index: 499;
+}
+#tableBanner.show { display: block; }
 
 /* ════════ HEADER ════════ */
 .header {
@@ -712,6 +721,7 @@ body::before {
 </div>
 
 <!-- OFFLINE BANNER -->
+<div id="tableBanner">🪑 Вы за столом №<span id="tableNumDisplay"></span></div>
 <div id="offlineBanner">Нет подключения к интернету</div>
 
 <div id="mainView" style="display:none">
@@ -861,6 +871,11 @@ body::before {
 <script>
 const API = '';
 let menu = [], cart = {}, deliveryType = 'delivery';
+const tableNumber = new URLSearchParams(window.location.search).get('table') || null;
+if (tableNumber) {
+  document.getElementById('tableNumDisplay').textContent = tableNumber;
+  document.getElementById('tableBanner').classList.add('show');
+}
 let orderSubmitting = false;
 
 // ── OFFLINE ──
@@ -1202,6 +1217,7 @@ async function submitOrder() {
         delivery_price: 0, discount: 0,
         payment_method: 'cash',
         comment: comment || null,
+        table_number: tableNumber ? parseInt(tableNumber) : null,
         items: Object.values(cart).map(i => ({ product_id: i.product.id, quantity: i.qty }))
       })
     });
