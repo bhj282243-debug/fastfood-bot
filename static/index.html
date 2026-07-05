@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;450;500;600&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-<link rel="manifest" href="/static/manifest.json">
+<link rel="manifest" href="/manifest.json">
 <style>
 :root {
   --copper:      #A0785A;
@@ -1281,7 +1281,7 @@ function showToast(msg, type = '') {
 }
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/static/service-worker.js').catch(() => {});
+  navigator.serviceWorker.register('/service-worker.js').catch(() => {});
 }
 
 lucide.createIcons();
