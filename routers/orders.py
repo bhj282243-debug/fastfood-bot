@@ -59,6 +59,7 @@ async def create_order(
         discount=order_data.discount,
         payment_method=order_data.payment_method,
         comment=order_data.comment,
+        table_number=order_data.table_number,
         total_price=calculated_total,
         status="new"
     )
