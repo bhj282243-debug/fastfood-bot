@@ -71,6 +71,7 @@ class Order(Base):
     discount = Column(Float, default=0)
     payment_method = Column(String, default="cash")
     comment = Column(String, nullable=True)
+    table_number = Column(Integer, nullable=True)
     status = Column(String, default="new", index=True)
     total_price = Column(Float, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow, index=True)
