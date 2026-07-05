@@ -97,6 +97,7 @@ class OrderCreate(BaseModel):
     discount: float = 0
     payment_method: str = "cash"
     comment: Optional[str] = None
+    table_number: Optional[int] = None
     items: List[OrderItemCreate]
 
     @field_validator("phone")
@@ -155,6 +156,7 @@ class Order(BaseModel):
     discount: float
     payment_method: str
     comment: Optional[str] = None
+    table_number: Optional[int] = None
     status: str
     total_price: float
     created_at: Optional[Any] = None
